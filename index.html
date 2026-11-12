@@ -1,0 +1,629 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}</style></head><body>
+<title>Comparador Saber 11 – Saber Pro</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: encabezado sobrio → dos comparadores lado a lado (A | B) → guía de lectura en columnas de texto */
+:root{
+  --bg:#f4f6fa; --surface:#ffffff; --ink:#14213a; --ink-2:#46546e; --muted:#6f7c93; --rule:#d9e0ea;
+  --accent:#1c5cab; --accent-soft:#e3edfb; --mean:#0d366b; --trend:#c25a14; --groupmark:#14213a;
+  --heat-lo:#cde2fb; --heat-hi:#0d366b; --a:#1c5cab; --b:#7a4fb3;
+  --f-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Public Sans","Segoe UI",Roboto,Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+  --r:8px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e141e; --surface:#151d2a; --ink:#e7ecf4; --ink-2:#b0bccf; --muted:#8693a8; --rule:#273246;
+  --accent:#6da7ec; --accent-soft:#1a2a40; --mean:#cde2fb; --trend:#f0954f; --groupmark:#ffffff;
+  --heat-lo:#184f95; --heat-hi:#d8e8fc; --a:#6da7ec; --b:#b99ae6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e141e; --surface:#151d2a; --ink:#e7ecf4; --ink-2:#b0bccf; --muted:#8693a8; --rule:#273246;
+  --accent:#6da7ec; --accent-soft:#1a2a40; --mean:#cde2fb; --trend:#f0954f; --groupmark:#ffffff;
+  --heat-lo:#184f95; --heat-hi:#d8e8fc; --a:#6da7ec; --b:#b99ae6; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:400 15px/1.55 var(--f-body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.wrap{max-width:1240px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;color:var(--ink)}
+h1{font-size:clamp(1.6rem,1.1rem + 2vw,2.35rem);font-weight:700;letter-spacing:-.01em;line-height:1.15}
+h2{font-size:1.35rem;font-weight:600;line-height:1.25}
+h3{font-size:1.02rem;font-weight:600}
+p{margin:0}
+a{color:var(--accent)}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font:500 .74rem/1 var(--f-body);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+header.top{padding-block:28px 18px;display:grid;gap:14px;border-bottom:1px solid var(--rule)}
+.lede{max-width:72ch;color:var(--ink-2);font-size:1.02rem}
+.facts{display:flex;flex-wrap:wrap;gap:8px 22px;color:var(--ink-2);font-size:.9rem}
+.facts b{color:var(--ink);font-weight:600}
+.jump{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.9rem}
+.status{margin-top:18px;padding:12px 14px;border:1px solid var(--rule);border-radius:var(--r);background:var(--surface);color:var(--ink-2);display:flex;gap:10px;align-items:center}
+.status.err{border-color:#d03b3b;color:var(--ink)}
+.spinner{width:14px;height:14px;border-radius:50%;border:2px solid var(--rule);border-top-color:var(--accent);animation:spin .9s linear infinite;flex:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spinner{animation:none}}
+
+/* Comparadores */
+.panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:20px}
+@media (max-width:920px){.panels{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);padding:16px;display:grid;gap:14px;min-width:0;border-top:4px solid var(--pc)}
+.panel[data-k="A"]{--pc:var(--a)} .panel[data-k="B"]{--pc:var(--b)}
+.phead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.tag{font:600 .78rem/1 var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--pc)}
+.ptitle{font:600 1.08rem/1.3 var(--f-display);margin-top:4px;overflow-wrap:anywhere}
+button.reset{font:500 .85rem var(--f-body);background:none;border:1px solid var(--rule);color:var(--ink-2);border-radius:6px;padding:6px 10px;cursor:pointer}
+button.reset:hover{border-color:var(--accent);color:var(--accent)}
+.filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px}
+@media (max-width:520px){.filters{grid-template-columns:minmax(0,1fr)}}
+.f{display:grid;gap:4px;min-width:0}
+.f.wide{grid-column:1/-1}
+.f label,.f .lab{font:500 .8rem/1.2 var(--f-body);color:var(--ink-2)}
+.f .hint{font-size:.74rem;color:var(--muted)}
+select,input[type=search]{font:400 .9rem var(--f-body);color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:6px;padding:7px 8px;width:100%;min-width:0}
+select:focus-visible,input:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.combo{display:grid;gap:4px}
+.checks{display:flex;flex-wrap:wrap;gap:6px}
+.chk{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--rule);border-radius:999px;padding:4px 10px;font-size:.85rem;cursor:pointer;user-select:none;background:var(--bg)}
+.chk input{accent-color:var(--accent);margin:0}
+.chk:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.count{font-size:.92rem;color:var(--ink-2)}
+.count b{color:var(--ink);font-family:var(--f-mono)}
+.warn{font-size:.85rem;color:var(--ink);background:var(--accent-soft);border-radius:6px;padding:8px 10px}
+.chartbox{position:relative;width:100%}
+canvas.plot{display:block;width:100%;height:auto;max-width:100%;touch-action:none}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.8rem;color:var(--ink-2);align-items:center}
+.lg{display:inline-flex;align-items:center;gap:6px}
+.sw-heat{width:46px;height:9px;border-radius:2px;background:linear-gradient(90deg,var(--heat-lo),var(--heat-hi))}
+.sw-dash{width:22px;border-top:2px dashed var(--mean)}
+.sw-trend{width:22px;border-top:2px solid var(--trend)}
+.sw-dia{width:10px;height:10px;background:var(--groupmark);transform:rotate(45deg);border:2px solid var(--surface);outline:1px solid var(--groupmark)}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--surface);font:500 .78rem/1.35 var(--f-body);padding:6px 8px;border-radius:6px;white-space:nowrap;transform:translate(-50%,calc(-100% - 10px));z-index:2}
+.stats{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+@media (max-width:520px){.stats{grid-template-columns:minmax(0,1fr)}}
+.kv{display:grid;grid-template-columns:auto auto auto;gap:4px 12px;font-size:.86rem;align-content:start}
+.kv .h{font-size:.72rem;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.kv .r{text-align:right}
+.quad{display:grid;grid-template-columns:auto 1fr 1fr;grid-template-rows:auto auto auto;gap:3px;font-size:.8rem}
+.quad .ax{color:var(--muted);font-size:.72rem;display:flex;align-items:center;justify-content:center;text-align:center}
+.quad .ax.v{writing-mode:vertical-rl;transform:rotate(180deg)}
+.q{border:1px solid var(--rule);border-radius:6px;padding:7px 8px;background:var(--bg)}
+.q .p{font:500 1.15rem/1.1 var(--f-mono);color:var(--ink)}
+.q .d{font-size:.72rem;color:var(--ink-2);line-height:1.3}
+.q.hi{border-color:var(--accent)}
+.reading{font-size:.88rem;color:var(--ink-2);border-left:3px solid var(--pc);padding-left:10px}
+
+/* Guía */
+.guide{margin-top:44px;display:grid;gap:34px}
+.sec{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:12px 36px;border-top:1px solid var(--rule);padding-top:22px}
+@media (max-width:820px){.sec{grid-template-columns:minmax(0,1fr)}}
+.sec .body{display:grid;gap:12px;max-width:74ch;min-width:0}
+.sec .body p,.sec .body li{color:var(--ink-2)}
+.sec .body b{color:var(--ink);font-weight:600}
+ol,ul{margin:0;padding-left:1.2em;display:grid;gap:6px}
+.tbl{overflow-x:auto;border:1px solid var(--rule);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.86rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font:600 .78rem var(--f-body);color:var(--ink-2);background:var(--bg)}
+tr:last-child td{border-bottom:none}
+td.n{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+dl{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr);gap:8px 18px;margin:0}
+@media (max-width:560px){dl{grid-template-columns:minmax(0,1fr)} dd{margin-bottom:8px}}
+dt{font-weight:600;color:var(--ink)} dd{margin:0;color:var(--ink-2)}
+.scalebar{display:grid;gap:6px}
+.scale{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr);gap:10px;align-items:center;font-size:.85rem}
+.scale .bar{height:10px;border-radius:2px;background:var(--rule);position:relative}
+.scale .bar i{position:absolute;top:-3px;height:16px;width:2px;background:var(--ink)}
+footer{margin-top:40px;border-top:1px solid var(--rule);padding-top:16px;font-size:.84rem;color:var(--muted);display:grid;gap:6px}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <span class="eyebrow">Proyecto IVA · Politécnico Grancolombiano</span>
+  <h1>Comparador Saber 11 – Saber Pro</h1>
+  <p class="lede">Cada estudiante presentó dos exámenes del ICFES: Saber 11 al terminar el colegio y Saber Pro al terminar la carrera. Este tablero muestra cómo se relacionan sus dos resultados. Arme dos grupos, uno en cada panel, y compárelos.</p>
+  <div class="facts">
+    <span><b class="num">732.148</b> estudiantes con ambos exámenes</span>
+    <span>Saber Pro <b>2022–2025</b></span>
+    <span>Saber 11 <b>2010–2022</b></span>
+    <span>Fuente: <b>ICFES, DataIcfes</b></span>
+  </div>
+  <nav class="jump" aria-label="Secciones">
+    <a href="#como-usar">Cómo usarlo</a><a href="#como-leer">Cómo leer el gráfico</a><a href="#puntajes">Qué miden los puntajes</a><a href="#unificacion">Saber 11 en una sola escala</a><a href="#datos">De dónde salen los datos</a><a href="#limites">Límites</a><a href="#glosario">Glosario</a>
+  </nav>
+</header>
+
+<div class="status" id="status" role="status"><span class="spinner"></span><span id="statusText">Cargando los datos de 732.148 estudiantes (8,5 MB)…</span></div>
+
+<section class="panels" id="panels" aria-label="Comparadores" hidden></section>
+
+<main class="guide">
+  <section class="sec" id="como-usar">
+    <h2>Cómo usarlo</h2>
+    <div class="body">
+      <ol>
+        <li><b>Arme un grupo en cada panel.</b> Los filtros van de lo general a lo particular: universidad, modalidad, sede, núcleo básico del conocimiento y programa. Cada lista muestra solo las opciones que existen dentro de lo que ya eligió arriba. Si deja un filtro en "Todas", incluye todo.</li>
+        <li><b>Escoja la prueba.</b> Puntaje global, razonamiento cuantitativo, lectura crítica o inglés. Los dos paneles usan la misma prueba para que la comparación sea justa.</li>
+        <li><b>Ajuste los años y el tipo de examen de Saber 11.</b> "Año de Saber Pro" es el año en que el estudiante terminó (2022 a 2025). "Saber 11" separa a quienes presentaron el examen antiguo (antes de 2014-2) del actual.</li>
+        <li><b>Lea el gráfico y los cuadrantes.</b> El gráfico se actualiza solo con cada cambio. Al pasar el cursor sobre una zona se ve cuántos estudiantes hay allí.</li>
+      </ol>
+      <p>Al abrir, el panel A muestra el Politécnico Grancolombiano y el panel B a todos los estudiantes del país. Con "Restablecer" un panel vuelve a mostrar todo el país.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="como-leer">
+    <h2>Cómo leer el gráfico</h2>
+    <div class="body">
+      <p><b>Eje horizontal:</b> el puntaje en Saber 11, al salir del colegio. <b>Eje vertical:</b> el puntaje en Saber Pro, al terminar la carrera. Cada estudiante es un punto. Como son miles, el gráfico los agrupa en celdas pequeñas: entre más oscuro el color, más estudiantes hay en esa zona. Si el grupo tiene menos de 1.500 estudiantes, se ven los puntos individuales.</p>
+      <p><b>Las líneas punteadas</b> marcan el promedio de todos los estudiantes del país en los mismos años y con el mismo tipo de examen de Saber 11. Dividen el gráfico en cuatro cuadrantes:</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Cuadrante</th><th>Qué significa</th></tr></thead>
+        <tbody>
+          <tr><td>Arriba a la derecha</td><td>Por encima del promedio nacional en las dos pruebas.</td></tr>
+          <tr><td>Arriba a la izquierda</td><td>Entró por debajo del promedio en Saber 11 y salió por encima en Saber Pro.</td></tr>
+          <tr><td>Abajo a la derecha</td><td>Entró por encima del promedio en Saber 11 y salió por debajo en Saber Pro.</td></tr>
+          <tr><td>Abajo a la izquierda</td><td>Por debajo del promedio nacional en las dos pruebas.</td></tr>
+        </tbody>
+      </table></div>
+      <p><b>La línea naranja</b> es la tendencia del grupo: indica qué puntaje de Saber Pro obtienen, en promedio, los estudiantes del grupo según su puntaje de Saber 11. Si la línea de un grupo pasa por encima de la de otro, sus estudiantes obtienen mejores resultados en Saber Pro que estudiantes del otro grupo que llegaron con el mismo puntaje de Saber 11. <b>El rombo</b> marca el promedio del grupo en las dos pruebas.</p>
+      <p><b>La correlación</b> va de −1 a 1 y resume qué tan alineados están los dos puntajes. Cerca de 0,6 o más significa que quien llega bien preparado del colegio suele salir bien en Saber Pro.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="puntajes">
+    <h2>Qué miden los puntajes</h2>
+    <div class="body">
+      <p>Las dos pruebas usan escalas distintas, así que <b>un número de Saber 11 no se compara directamente con uno de Saber Pro</b>. Lo que se compara es la posición de cada estudiante frente al promedio en cada prueba.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Prueba en el tablero</th><th>En Saber 11 (eje horizontal)</th><th>En Saber Pro (eje vertical)</th></tr></thead>
+        <tbody>
+          <tr><td>Puntaje global</td><td>0 a 500. Promedio ponderado de las 5 pruebas. En 2014-2 el promedio nacional fue 250.</td><td>0 a 300. Resume los módulos de competencias genéricas.</td></tr>
+          <tr><td>Razonamiento cuantitativo</td><td>Matemáticas, 0 a 100</td><td>Razonamiento cuantitativo, 0 a 300</td></tr>
+          <tr><td>Lectura crítica</td><td>Lectura crítica, 0 a 100</td><td>Lectura crítica, 0 a 300</td></tr>
+          <tr><td>Inglés</td><td>Inglés, 0 a 100</td><td>Inglés, 0 a 300</td></tr>
+        </tbody>
+      </table></div>
+      <p>En Saber 11 cada prueba se fijó en 2014-2 con promedio 50 y desviación estándar 10, y el global es 5 × (3·Matemáticas + 3·Lectura crítica + 3·Ciencias naturales + 3·Sociales y ciudadanas + Inglés) ÷ 13, según la guía metodológica del ICFES.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="unificacion">
+    <h2>Saber 11 en una sola escala</h2>
+    <div class="body">
+      <p>En el segundo semestre de 2014 el ICFES cambió la estructura de Saber 11: pasó de ocho pruebas (lenguaje, filosofía, matemáticas, biología, física, química, ciencias sociales e inglés) a cinco. Según el ICFES, los resultados de una estructura no son comparables con los de la otra. Para que todos los estudiantes queden en la misma escala, la vigente desde 2014-2, se hizo lo siguiente:</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Saber 11 presentado en</th><th>Cómo se obtiene el puntaje</th><th>Estudiantes</th></tr></thead>
+        <tbody>
+          <tr><td>2014-2 en adelante</td><td>Puntaje oficial, sin cambios.</td><td class="n">626.075</td></tr>
+          <tr><td>2012-1 a 2014-1</td><td>Recalificación oficial del ICFES: el propio ICFES volvió a calificar estos exámenes en la estructura nueva. El global se calcula con la fórmula del ICFES.</td><td class="n">65.227</td></tr>
+          <tr><td>2010-1 a 2011-2</td><td>Equivalencia estimada. Se arman las cinco pruebas con las antiguas: lectura crítica = (lenguaje + filosofía) ÷ 2; ciencias naturales = (biología + física + química) ÷ 3; sociales = ciencias sociales. Luego se ubica a cada estudiante en la escala nueva según su posición frente a todos los evaluados del país en su misma aplicación.</td><td class="n">40.846</td></tr>
+        </tbody>
+      </table></div>
+      <p><b>¿Qué tan buena es la equivalencia?</b> Se puso a prueba en 2012-1 a 2014-1, donde existe la recalificación oficial, y se comparó con ella. El promedio estimado quedó a menos de 1 punto del oficial en casi todas las pruebas (la mayor diferencia fue 2,2 puntos en inglés de primer semestre), y el error típico por estudiante fue de 1 a 6 puntos en la escala de 0 a 100. Para un estudiante individual es una aproximación; para promedios de grupos es confiable.</p>
+      <p>Los estudiantes que presentaron Saber 11 antes de 2010 no están en el tablero, porque esos años no se incluyeron en la base del proyecto.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="datos">
+    <h2>De dónde salen los datos</h2>
+    <div class="body">
+      <ul>
+        <li><b>Saber Pro, competencias genéricas, 2022-2 a 2025-4:</b> 1.057.048 registros publicados por el ICFES en DataIcfes.</li>
+        <li><b>Saber 11, 2010-1 a 2023-2:</b> 7,8 millones de registros de DataIcfes.</li>
+        <li><b>Cruce entre los dos exámenes:</b> archivo oficial "Cruce Examen Saber 11 – Examen Saber Pro" del ICFES, versión de septiembre de 2026. El ICFES empareja a cada estudiante con su documento de identidad, sus nombres y su fecha de nacimiento, apoyado en la Registraduría para unir la tarjeta de identidad con la cédula.</li>
+        <li><b>Resultado:</b> 732.148 registros de Saber Pro (69,3%) tienen su Saber 11 y son los que se ven aquí. Otros 173.253 no tienen pareja en el cruce del ICFES y 151.647 la tienen, pero con un Saber 11 anterior a 2010 o de un periodo que falta en la base.</li>
+      </ul>
+      <p>Los datos son anónimos: el ICFES publica un código por estudiante, no su nombre ni su documento.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="limites">
+    <h2>Límites</h2>
+    <div class="body">
+      <ul>
+        <li><b>Solo aparece quien presentó los dos exámenes.</b> No están quienes no entraron a la educación superior o no llegaron al final de la carrera.</li>
+        <li><b>No mide causas.</b> Una tendencia más alta sugiere que el grupo convierte mejor su punto de partida en resultados, pero también influyen la edad, el trabajo, la modalidad y otros factores que el gráfico no controla.</li>
+        <li><b>Hay grupos de distinta edad.</b> En programas a distancia y virtuales muchos estudiantes presentaron Saber 11 hace más de diez años; los que lo hicieron antes de 2010 no aparecen, y eso reduce la parte del grupo que se ve.</li>
+        <li><b>Grupos pequeños.</b> Con menos de 30 estudiantes los porcentajes y la tendencia cambian mucho con pocos casos; el panel lo advierte.</li>
+        <li><b>Saber 11 de 2020-2 incompleto:</b> la base del proyecto tiene solo parte de ese periodo, lo que reduce los cruces de Saber Pro 2024 y 2025.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" id="glosario">
+    <h2>Glosario</h2>
+    <div class="body">
+      <dl>
+        <dt>Año de Saber Pro</dt><dd>Año en que el estudiante presentó Saber Pro, por lo general al final de la carrera.</dd>
+        <dt>Modalidad</dt><dd>Presencial, a distancia, distancia virtual o semipresencial, según el registro del programa.</dd>
+        <dt>Sede</dt><dd>Municipio donde se ofrece el programa.</dd>
+        <dt>Núcleo básico del conocimiento</dt><dd>Agrupación de programas afines que usa el Ministerio de Educación, como Administración o Ingeniería de sistemas. Desde 2018 reemplaza a los antiguos grupos de referencia del ICFES.</dd>
+        <dt>Promedio nacional</dt><dd>Promedio de todos los estudiantes cruzados del país en los años y el tipo de examen de Saber 11 elegidos en ese panel.</dd>
+        <dt>Recalificación</dt><dd>Nueva calificación que hizo el ICFES de los exámenes de 2012-1 a 2014-1 para expresarlos en la estructura actual.</dd>
+        <dt>Desviación estándar</dt><dd>Qué tanto se alejan los puntajes del promedio. En Saber 11, unos dos de cada tres estudiantes quedan a menos de una desviación (10 puntos por prueba) del promedio.</dd>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>Proyecto IVA (valor agregado en educación superior) · Facultad de Ingeniería, Diseño e Innovación y Escuela de Ciencias Básicas, Politécnico Grancolombiano.</span>
+  <span>Datos abiertos del ICFES (DataIcfes). Guías metodológicas del ICFES: Examen Saber 11° (marzo 2025) y Cruces Saber 11° – Saber Pro – Saber TyT (septiembre 2026). Datos preparados con el script <span class="num">preparacion_datos_IVA.R</span>.</span>
+</footer>
+</div>
+
+<template id="tplPanel">
+<article class="panel">
+  <div class="phead">
+    <div><div class="tag"></div><div class="ptitle"></div></div>
+    <button class="reset" type="button">Restablecer</button>
+  </div>
+  <div class="filters">
+    <div class="f wide"><span class="lab">Año de Saber Pro</span><div class="checks" data-role="anios"></div></div>
+    <div class="f wide combo">
+      <label data-for="ies">Universidad</label>
+      <input type="search" data-role="ies-q" placeholder="Escriba para buscar una universidad" autocomplete="off">
+      <select data-f="ies"></select>
+    </div>
+    <div class="f"><label data-for="mod">Modalidad</label><select data-f="mod"></select></div>
+    <div class="f"><label data-for="sede">Sede del programa</label><select data-f="sede"></select></div>
+    <div class="f wide"><label data-for="nbc">Núcleo básico del conocimiento</label><select data-f="nbc"></select></div>
+    <div class="f wide combo">
+      <label data-for="prog">Programa</label>
+      <input type="search" data-role="prog-q" placeholder="Escriba para buscar un programa" autocomplete="off">
+      <select data-f="prog"></select>
+    </div>
+    <div class="f"><label data-for="prueba">Prueba</label><select data-role="prueba">
+      <option value="global">Puntaje global</option>
+      <option value="rc">Razonamiento cuantitativo</option>
+      <option value="lc">Lectura crítica</option>
+      <option value="ing">Inglés</option></select>
+      <span class="hint">Se aplica a los dos paneles.</span></div>
+    <div class="f"><span class="lab">Saber 11</span><div class="checks" data-role="estr"></div></div>
+  </div>
+  <div class="count" aria-live="polite"></div>
+  <div class="warn" data-role="warn" hidden></div>
+  <div class="chartbox"><canvas class="plot" role="img"></canvas><div class="tip" hidden></div></div>
+  <div class="legend">
+    <span class="lg"><span class="sw-heat"></span>Menos → más estudiantes</span>
+    <span class="lg"><span class="sw-dash"></span>Promedio nacional</span>
+    <span class="lg"><span class="sw-trend"></span>Tendencia del grupo</span>
+    <span class="lg"><span class="sw-dia"></span>Promedio del grupo</span>
+  </div>
+  <div class="stats">
+    <div class="kv" data-role="kv"></div>
+    <div class="quad" data-role="quad"></div>
+  </div>
+  <p class="reading" data-role="reading"></p>
+</article>
+</template>
+
+<script>
+(() => {
+"use strict";
+const fmt = new Intl.NumberFormat("es-CO");
+const fmt1 = new Intl.NumberFormat("es-CO",{minimumFractionDigits:1,maximumFractionDigits:1});
+const fmt2 = new Intl.NumberFormat("es-CO",{minimumFractionDigits:2,maximumFractionDigits:2});
+const $ = (s,el=document)=>el.querySelector(s);
+
+const TESTS = {
+  global:{label:"Puntaje global", x:"s11_global", y:"sp_global", xName:"Saber 11 · puntaje global (0–500)", yName:"Saber Pro · puntaje global (0–300)", na16:true},
+  rc:{label:"Razonamiento cuantitativo", x:"s11_mat", y:"sp_rc", xName:"Saber 11 · matemáticas (0–100)", yName:"Saber Pro · razonamiento cuantitativo (0–300)"},
+  lc:{label:"Lectura crítica", x:"s11_lc", y:"sp_lc", xName:"Saber 11 · lectura crítica (0–100)", yName:"Saber Pro · lectura crítica (0–300)"},
+  ing:{label:"Inglés", x:"s11_ing", y:"sp_ing", xName:"Saber 11 · inglés (0–100)", yName:"Saber Pro · inglés (0–300)"}
+};
+const LEVELS = ["ies","mod","sede","nbc","prog"];
+const LEVEL_ALL = {ies:"Todas las universidades", mod:"Todas", sede:"Todas", nbc:"Todos", prog:"Todos los programas"};
+const NA = {u8:255, u16:65535};
+
+let D = null, CAT = null, N = 0, prueba = "global", domains = {};
+const panels = [];
+
+async function load(){
+  // los datos van comprimidos (gzip) y codificados en base64 en un archivo de texto
+  const [catR, binR] = await Promise.all([fetch("catalogo.json"), fetch("datos.b64.txt")]);
+  if(!catR.ok || !binR.ok) throw new Error("No se encontraron los archivos de datos.");
+  CAT = await catR.json();
+  const b64 = (await binR.text()).trim();
+  const bin = atob(b64); let buf = new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) buf[i]=bin.charCodeAt(i);
+  if(buf[0]===0x1f && buf[1]===0x8b){
+    if(!("DecompressionStream" in window)) throw new Error("Este navegador no puede descomprimir los datos. Use una versión reciente de Chrome, Edge, Firefox o Safari.");
+    const ds = new Blob([buf]).stream().pipeThrough(new DecompressionStream("gzip"));
+    buf = new Uint8Array(await new Response(ds).arrayBuffer());
+  }
+  N = CAT.n; D = {}; let off = 0;
+  for(const c of CAT.columnas){
+    const len = N*c.bytes;
+    const slice = buf.slice(off, off+len).buffer;
+    D[c.nombre] = c.bytes===1 ? new Uint8Array(slice) : new Uint16Array(slice);
+    off += len;
+  }
+  if(off!==buf.length) throw new Error("El archivo de datos no tiene el tamaño esperado.");
+  CAT.mod = CAT.modalidad; CAT.prog = CAT.programa;
+  // dominios fijos por prueba (percentil 0,2 a 99,8 de todo el país) para comparar paneles a la misma escala
+  for(const k of Object.keys(TESTS)) domains[k] = {x:range(D[TESTS[k].x]), y:range(D[TESTS[k].y])};
+}
+function range(arr){
+  const isU16 = arr instanceof Uint16Array, na = isU16?NA.u16:NA.u8, max = isU16?1000:256;
+  const h = new Uint32Array(max); let n=0;
+  for(let i=0;i<arr.length;i++){const v=arr[i]; if(v!==na && v<max){h[v]++;n++;}}
+  const lo=n*0.002, hi=n*0.998; let c=0,a=0,b=max-1;
+  for(let v=0;v<max;v++){c+=h[v]; if(c>=lo){a=v;break;}}
+  c=0; for(let v=0;v<max;v++){c+=h[v]; if(c>=hi){b=v;break;}}
+  const step = (b-a)>150?50:10;
+  return [Math.max(0,Math.floor(a/step)*step), Math.ceil((b+1)/step)*step];
+}
+
+/* ---------- Panel ---------- */
+function makePanel(key, preset){
+  const el = $("#tplPanel").content.firstElementChild.cloneNode(true);
+  el.dataset.k = key;
+  $(".tag",el).textContent = "Grupo " + key;
+  const st = {key, el, anios:new Set([22,23,24,25]), estr:new Set([0,1]), sel:{ies:null,mod:null,sede:null,nbc:null,prog:null}, q:{ies:"",prog:""}, result:null};
+  // ids estables
+  el.querySelectorAll("select[data-f]").forEach(s=>{s.id=`p${key}-${s.dataset.f}`; const l=el.querySelector(`label[data-for="${s.dataset.f}"]`); if(l) l.htmlFor=s.id;});
+  const pr = $('[data-role="prueba"]',el); pr.id=`p${key}-prueba`; el.querySelector('label[data-for="prueba"]').htmlFor=pr.id;
+  $('[data-role="ies-q"]',el).id=`p${key}-ies-q`; $('[data-role="prog-q"]',el).id=`p${key}-prog-q`;
+  // años
+  const an = $('[data-role="anios"]',el);
+  for(const y of [22,23,24,25]){
+    const id=`p${key}-anio-${y}`;
+    an.insertAdjacentHTML("beforeend",`<label class="chk" for="${id}"><input type="checkbox" id="${id}" value="${y}" checked>20${y}</label>`);
+  }
+  an.addEventListener("change",e=>{const v=+e.target.value; e.target.checked?st.anios.add(v):st.anios.delete(v); if(!st.anios.size){st.anios.add(v); e.target.checked=true;} update(st);});
+  const es = $('[data-role="estr"]',el);
+  [[0,"Antes de 2014-2"],[1,"Desde 2014-2"]].forEach(([v,t])=>{
+    const id=`p${key}-estr-${v}`;
+    es.insertAdjacentHTML("beforeend",`<label class="chk" for="${id}"><input type="checkbox" id="${id}" value="${v}" checked>${t}</label>`);
+  });
+  es.addEventListener("change",e=>{const v=+e.target.value; e.target.checked?st.estr.add(v):st.estr.delete(v); if(!st.estr.size){st.estr.add(v); e.target.checked=true;} update(st);});
+  el.querySelectorAll("select[data-f]").forEach(s=>s.addEventListener("change",()=>{
+    const f=s.dataset.f; st.sel[f]= s.value===""?null:+s.value;
+    // al cambiar un nivel se limpian los de abajo
+    for(const l of LEVELS.slice(LEVELS.indexOf(f)+1)) st.sel[l]=null;
+    update(st);
+  }));
+  for(const f of ["ies","prog"]){
+    const q=$(`[data-role="${f}-q"]`,el);
+    q.addEventListener("input",()=>{st.q[f]=q.value.trim().toLowerCase(); fillSelect(st,f);});
+  }
+  pr.addEventListener("change",()=>{prueba=pr.value; panels.forEach(p=>{$('[data-role="prueba"]',p.el).value=prueba; update(p);});});
+  $(".reset",el).addEventListener("click",()=>{
+    st.anios=new Set([22,23,24,25]); st.estr=new Set([0,1]); for(const l of LEVELS) st.sel[l]=null; st.q={ies:"",prog:""};
+    el.querySelectorAll('[data-role="anios"] input,[data-role="estr"] input').forEach(i=>i.checked=true);
+    el.querySelectorAll('input[type=search]').forEach(i=>i.value="");
+    update(st);
+  });
+  if(preset && preset.ies!=null) st.sel.ies = preset.ies;
+  setupCanvas(st);
+  return st;
+}
+
+function compute(st){
+  const T = TESTS[prueba], X = D[T.x], Y = D[T.y];
+  const naX = X instanceof Uint16Array?NA.u16:NA.u8, naY = Y instanceof Uint16Array?NA.u16:NA.u8;
+  const anio=D.anio, desp=D.despues, cols=LEVELS.map(l=>D[l]);
+  const opts = LEVELS.map(l=>new Uint32Array(CAT[l].length));
+  const sel = LEVELS.map(l=>st.sel[l]);
+  const yrOk = new Uint8Array(256); st.anios.forEach(y=>yrOk[y]=1);
+  const esOk = [st.estr.has(0)?1:0, st.estr.has(1)?1:0];
+  // nacional (mismos años y tipo de examen)
+  let nN=0, nSx=0, nSy=0;
+  const idx = [];
+  for(let i=0;i<N;i++){
+    if(!yrOk[anio[i]] || !esOk[desp[i]]) continue;
+    const x=X[i], y=Y[i]; const valid = x!==naX && y!==naY;
+    if(valid){nN++; nSx+=x; nSy+=y;}
+    let pass=true;
+    for(let l=0;l<5;l++){
+      const v=cols[l][i];
+      if(pass) opts[l][v]++;
+      if(sel[l]!==null && sel[l]!==v){pass=false; break;}
+    }
+    if(pass && valid) idx.push(i);
+  }
+  const mx=nSx/nN, my=nSy/nN;
+  let sx=0,sy=0,sxx=0,syy=0,sxy=0; const q=[0,0,0,0]; // q: [arriba-izq, arriba-der, abajo-izq, abajo-der]
+  for(const i of idx){
+    const x=X[i], y=Y[i]; sx+=x; sy+=y; sxx+=x*x; syy+=y*y; sxy+=x*y;
+    q[(y>my?0:2)+(x>mx?1:0)]++;
+  }
+  const n=idx.length; let r=NaN, slope=NaN, icpt=NaN, gx=NaN, gy=NaN;
+  if(n>0){gx=sx/n; gy=sy/n;}
+  if(n>2){
+    const vx=sxx/n-gx*gx, vy=syy/n-gy*gy, cxy=sxy/n-gx*gy;
+    if(vx>0&&vy>0){r=cxy/Math.sqrt(vx*vy); slope=cxy/vx; icpt=gy-slope*gx;}
+  }
+  st.result={idx,n,mx,my,nN,gx,gy,r,slope,icpt,q,opts,X,Y};
+}
+
+function optionLabel(name,count){return `${name} (${fmt.format(count)})`;}
+function fillSelect(st,f){
+  const s=st.el.querySelector(`select[data-f="${f}"]`), l=LEVELS.indexOf(f), c=st.result.opts[l];
+  const list=[]; const q=st.q[f]||"";
+  for(let v=0;v<c.length;v++) if(c[v]>0) list.push(v);
+  list.sort((a,b)=>CAT[f][a].localeCompare(CAT[f][b],"es"));
+  const total=list.reduce((a,v)=>a+c[v],0);
+  const frag=document.createDocumentFragment();
+  const o0=document.createElement("option"); o0.value=""; o0.textContent=`${LEVEL_ALL[f]} (${fmt.format(total)})`; frag.appendChild(o0);
+  for(const v of list){
+    const name=CAT[f][v];
+    if(q && !name.toLowerCase().includes(q) && st.sel[f]!==v) continue;
+    const o=document.createElement("option"); o.value=v; o.textContent=optionLabel(name,c[v]); frag.appendChild(o);
+  }
+  s.replaceChildren(frag);
+  s.value = st.sel[f]===null?"":String(st.sel[f]);
+}
+
+function groupName(st){
+  const parts=[];
+  if(st.sel.prog!==null) parts.push(CAT.prog[st.sel.prog]);
+  else if(st.sel.nbc!==null) parts.push(CAT.nbc[st.sel.nbc]);
+  if(st.sel.ies!==null) parts.push(CAT.ies[st.sel.ies]);
+  if(st.sel.mod!==null) parts.push(CAT.mod[st.sel.mod]);
+  if(st.sel.sede!==null) parts.push(CAT.sede[st.sel.sede]);
+  return parts.length?parts.join(" · "):"Todo el país";
+}
+
+function update(st){
+  compute(st);
+  for(const f of LEVELS) fillSelect(st,f);
+  const R=st.result, T=TESTS[prueba];
+  $(".ptitle",st.el).textContent=groupName(st);
+  const yrs=[...st.anios].sort().map(y=>"20"+y).join(", ");
+  $(".count",st.el).innerHTML=`<b>${fmt.format(R.n)}</b> estudiantes en el gráfico · Saber Pro ${yrs}`;
+  const w=$('[data-role="warn"]',st.el);
+  if(R.n===0){w.hidden=false; w.textContent="No hay estudiantes con esta combinación de filtros. Quite alguno o use Restablecer.";}
+  else if(R.n<30){w.hidden=false; w.textContent=`Grupo muy pequeño (${R.n} estudiantes): los porcentajes y la tendencia pueden cambiar mucho con pocos casos.`;}
+  else w.hidden=true;
+  // tabla de promedios
+  const kv=$('[data-role="kv"]',st.el);
+  const d=(a,b)=>isNaN(a)?"–":fmt1.format(a);
+  kv.innerHTML=`<span class="h"></span><span class="h r">Grupo</span><span class="h r">País</span>
+    <span>Saber 11</span><span class="r num">${d(R.gx)}</span><span class="r num">${fmt1.format(R.mx)}</span>
+    <span>Saber Pro</span><span class="r num">${d(R.gy)}</span><span class="r num">${fmt1.format(R.my)}</span>
+    <span>Correlación</span><span class="r num">${isNaN(R.r)?"–":fmt2.format(R.r)}</span><span class="r"></span>`;
+  // cuadrantes
+  const pc=v=>R.n?Math.round(100*v/R.n):0;
+  const [ul,ur,ll,lr]=R.q;
+  const best=Math.max(...R.q);
+  const cell=(v,txt)=>`<div class="q${v===best&&R.n?" hi":""}"><div class="p">${pc(v)}%</div><div class="d">${txt}</div></div>`;
+  $('[data-role="quad"]',st.el).innerHTML=
+    `<div class="ax v" style="grid-row:1/3">Saber Pro ↑</div>${cell(ul,"Bajo en Saber 11, alto en Saber Pro")}${cell(ur,"Alto en las dos")}`+
+    `${cell(ll,"Bajo en las dos")}${cell(lr,"Alto en Saber 11, bajo en Saber Pro")}`+
+    `<div></div><div class="ax" style="grid-column:2/4">Saber 11 →</div>`;
+  // lectura en palabras
+  const rd=$('[data-role="reading"]',st.el);
+  if(R.n>0){
+    const up=pc(ul+ur);
+    rd.textContent=`${pc(ur)}% de este grupo superó el promedio nacional en las dos pruebas y ${pc(ll)}% quedó por debajo en ambas. `+
+      `En ${T.label.toLowerCase()} de Saber Pro, ${up}% del grupo está por encima del promedio del país (${fmt1.format(R.my)}).`+
+      ` ${pc(ul)}% llegó por debajo del promedio en Saber 11 y salió por encima en Saber Pro; ${pc(lr)}% hizo el camino contrario.`;
+  } else rd.textContent="";
+  draw(st);
+}
+
+/* ---------- Gráfico ---------- */
+function css(name){return getComputedStyle(document.documentElement).getPropertyValue(name).trim();}
+function hex2rgb(h){h=h.replace("#",""); if(h.length===3)h=h.split("").map(c=>c+c).join(""); const n=parseInt(h,16); return [(n>>16)&255,(n>>8)&255,n&255];}
+function setupCanvas(st){
+  const cv=$("canvas",st.el), tip=$(".tip",st.el);
+  st.cv=cv; st.tip=tip;
+  const ro=new ResizeObserver(()=>{ if(st.result) draw(st); });
+  ro.observe($(".chartbox",st.el));
+  const move=e=>{
+    const g=st.geom; if(!g) return;
+    const rect=cv.getBoundingClientRect(); const px=e.clientX-rect.left, py=e.clientY-rect.top;
+    if(px<g.L||px>g.L+g.W||py<g.T||py>g.T+g.H){tip.hidden=true; return;}
+    const bx=Math.min(g.BX-1,Math.floor((px-g.L)/g.W*g.BX)), by=Math.min(g.BY-1,Math.floor((g.T+g.H-py)/g.H*g.BY));
+    const c=g.bins[by*g.BX+bx];
+    const x0=g.x0+bx*(g.x1-g.x0)/g.BX, x1=x0+(g.x1-g.x0)/g.BX, y0=g.y0+by*(g.y1-g.y0)/g.BY, y1=y0+(g.y1-g.y0)/g.BY;
+    tip.hidden=false; tip.style.left=px+"px"; tip.style.top=py+"px";
+    tip.textContent=`Saber 11 ${Math.round(x0)}–${Math.round(x1)} · Saber Pro ${Math.round(y0)}–${Math.round(y1)} · ${fmt.format(c)} estudiante${c===1?"":"s"}`;
+  };
+  cv.addEventListener("pointermove",move); cv.addEventListener("pointerdown",move);
+  cv.addEventListener("pointerleave",()=>tip.hidden=true);
+}
+function draw(st){
+  const R=st.result, cv=st.cv, T=TESTS[prueba], dom=domains[prueba];
+  const box=cv.parentElement.getBoundingClientRect(); const Wc=Math.max(280,box.width); const Hc=Math.round(Wc*(Wc<520?1.0:0.82));
+  const dpr=window.devicePixelRatio||1;
+  cv.width=Math.round(Wc*dpr); cv.height=Math.round(Hc*dpr); cv.style.height=Hc+"px";
+  const ctx=cv.getContext("2d"); ctx.setTransform(dpr,0,0,dpr,0,0);
+  const ink=css("--ink"), ink2=css("--ink-2"), muted=css("--muted"), rule=css("--rule"), surface=css("--surface");
+  const L=52, Rm=12, Tm=12, B=46, W=Wc-L-Rm, H=Hc-Tm-B;
+  const [x0,x1]=dom.x, [y0,y1]=dom.y;
+  const sx=v=>L+(v-x0)/(x1-x0)*W, sy=v=>Tm+H-(v-y0)/(y1-y0)*H;
+  ctx.clearRect(0,0,Wc,Hc);
+  ctx.font=`11px ${css("--f-mono")}`; ctx.fillStyle=muted; ctx.strokeStyle=rule; ctx.lineWidth=1;
+  // grilla y ejes
+  const xs=niceTicks(x0,x1,6), ys=niceTicks(y0,y1,6);
+  ctx.textAlign="center"; ctx.textBaseline="top";
+  for(const t of xs){const X=Math.round(sx(t))+.5; ctx.beginPath(); ctx.moveTo(X,Tm); ctx.lineTo(X,Tm+H); ctx.stroke(); ctx.fillText(t,X,Tm+H+6);}
+  ctx.textAlign="right"; ctx.textBaseline="middle";
+  for(const t of ys){const Y=Math.round(sy(t))+.5; ctx.beginPath(); ctx.moveTo(L,Y); ctx.lineTo(L+W,Y); ctx.stroke(); ctx.fillText(t,L-6,Y);}
+  ctx.fillStyle=ink2; ctx.font=`500 12px ${css("--f-body")}`;
+  ctx.textAlign="center"; ctx.textBaseline="bottom"; ctx.fillText(T.xName,L+W/2,Hc-2);
+  ctx.save(); ctx.translate(13,Tm+H/2); ctx.rotate(-Math.PI/2); ctx.textBaseline="middle"; ctx.fillText(T.yName,0,0); ctx.restore();
+  // densidad
+  const BX=Math.max(30,Math.min(70,Math.round(W/7))), BY=Math.max(26,Math.round(BX*H/W));
+  const bins=new Uint32Array(BX*BY); let mxb=0;
+  const X=R.X, Y=R.Y;
+  for(const i of R.idx){
+    let bx=Math.floor((X[i]-x0)/(x1-x0)*BX), by=Math.floor((Y[i]-y0)/(y1-y0)*BY);
+    if(bx<0)bx=0; if(bx>=BX)bx=BX-1; if(by<0)by=0; if(by>=BY)by=BY-1;
+    const k=by*BX+bx; bins[k]++; if(bins[k]>mxb)mxb=bins[k];
+  }
+  st.geom={L,T:Tm,W,H,BX,BY,bins,x0,x1,y0,y1};
+  ctx.save(); ctx.beginPath(); ctx.rect(L,Tm,W,H); ctx.clip();
+  if(R.n>0 && R.n<1500){
+    const c=hex2rgb(css("--accent"));
+    ctx.fillStyle=`rgba(${c[0]},${c[1]},${c[2]},0.55)`;
+    const jit=(i,k)=>((((i+k)*2654435761)>>>0)%1000)/1000-.5;
+    for(const i of R.idx){ctx.beginPath(); ctx.arc(sx(X[i]+jit(i,0)*0.8),sy(Y[i]+jit(i,7)*0.8),2.6,0,Math.PI*2); ctx.fill();}
+  } else if(R.n>0){
+    const lo=hex2rgb(css("--heat-lo")), hi=hex2rgb(css("--heat-hi"));
+    const cw=W/BX, ch=H/BY;
+    for(let by=0;by<BY;by++) for(let bx=0;bx<BX;bx++){
+      const c=bins[by*BX+bx]; if(!c) continue;
+      const t=Math.sqrt(c/mxb);
+      ctx.fillStyle=`rgb(${Math.round(lo[0]+(hi[0]-lo[0])*t)},${Math.round(lo[1]+(hi[1]-lo[1])*t)},${Math.round(lo[2]+(hi[2]-lo[2])*t)})`;
+      ctx.fillRect(L+bx*cw, Tm+H-(by+1)*ch, Math.ceil(cw), Math.ceil(ch));
+    }
+  }
+  // promedio nacional
+  ctx.strokeStyle=css("--mean"); ctx.lineWidth=1.5; ctx.setLineDash([6,4]);
+  ctx.beginPath(); ctx.moveTo(sx(R.mx),Tm); ctx.lineTo(sx(R.mx),Tm+H); ctx.moveTo(L,sy(R.my)); ctx.lineTo(L+W,sy(R.my)); ctx.stroke();
+  ctx.setLineDash([]);
+  // tendencia
+  if(!isNaN(R.slope) && R.n>=10){
+    ctx.strokeStyle=surface; ctx.lineWidth=5; const p1=[x0,R.icpt+R.slope*x0], p2=[x1,R.icpt+R.slope*x1];
+    ctx.beginPath(); ctx.moveTo(sx(p1[0]),sy(p1[1])); ctx.lineTo(sx(p2[0]),sy(p2[1])); ctx.stroke();
+    ctx.strokeStyle=css("--trend"); ctx.lineWidth=2.5;
+    ctx.beginPath(); ctx.moveTo(sx(p1[0]),sy(p1[1])); ctx.lineTo(sx(p2[0]),sy(p2[1])); ctx.stroke();
+  }
+  // promedio del grupo
+  if(R.n>0){
+    const gx=sx(R.gx), gy=sy(R.gy), s=7;
+    ctx.fillStyle=css("--groupmark"); ctx.strokeStyle=surface; ctx.lineWidth=2.5;
+    ctx.beginPath(); ctx.moveTo(gx,gy-s); ctx.lineTo(gx+s,gy); ctx.lineTo(gx,gy+s); ctx.lineTo(gx-s,gy); ctx.closePath(); ctx.stroke(); ctx.fill();
+  }
+  ctx.restore();
+  // etiquetas de promedio nacional
+  ctx.font=`500 11px ${css("--f-body")}`; ctx.fillStyle=ink2;
+  ctx.textAlign="left"; ctx.textBaseline="top";
+  const lblX=Math.min(sx(R.mx)+4, L+W-80); ctx.fillText(`País ${fmt1.format(R.mx)}`, lblX, Tm+3);
+  ctx.textAlign="right"; ctx.textBaseline="bottom"; ctx.fillText(`País ${fmt1.format(R.my)}`, L+W-3, sy(R.my)-3);
+  ctx.strokeStyle=ink; ctx.lineWidth=1; ctx.strokeRect(L+.5,Tm+.5,W-1,H-1);
+  cv.setAttribute("aria-label",`Gráfico de ${T.label}: ${R.n} estudiantes del grupo. Promedio del grupo en Saber 11 ${fmt1.format(R.gx||0)} y en Saber Pro ${fmt1.format(R.gy||0)}; promedio del país ${fmt1.format(R.mx)} y ${fmt1.format(R.my)}.`);
+}
+function niceTicks(a,b,n){
+  const span=b-a, raw=span/n, mag=Math.pow(10,Math.floor(Math.log10(raw)));
+  const step=[1,2,2.5,5,10].map(m=>m*mag).find(s=>span/s<=n)||raw;
+  const out=[]; for(let v=Math.ceil(a/step)*step; v<=b+1e-9; v+=step) out.push(Math.round(v*100)/100);
+  return out;
+}
+
+/* ---------- Inicio ---------- */
+load().then(()=>{
+  const poli = CAT.ies.findIndex(n=>n.startsWith("POLITECNICO GRANCOLOMBIANO"));
+  const host=$("#panels");
+  const A=makePanel("A",{ies:poli>=0?poli:null}), Bp=makePanel("B",{});
+  panels.push(A,Bp); host.append(A.el,Bp.el);
+  $("#status").hidden=true; host.hidden=false;
+  panels.forEach(update);
+  const mq=matchMedia("(prefers-color-scheme: dark)"); const redraw=()=>panels.forEach(p=>p.result&&draw(p));
+  mq.addEventListener?.("change",redraw);
+  new MutationObserver(redraw).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+}).catch(err=>{
+  const s=$("#status"); s.classList.add("err"); s.innerHTML=""; const t=document.createElement("span");
+  t.textContent="No se pudieron cargar los datos. "+(err&&err.message?err.message:"")+" Recargue la página; si el problema sigue, avise al equipo del proyecto IVA.";
+  s.append(t);
+});
+})();
+</script>
+</body></html>
