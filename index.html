@@ -1,5 +1,4 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}</style></head><body>
-<title>Comparador Saber 11 – Saber Pro</title>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Comparador Saber 11 – Saber Pro</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,6 +9,8 @@
   --bg:#f4f6fa; --surface:#ffffff; --ink:#14213a; --ink-2:#46546e; --muted:#6f7c93; --rule:#d9e0ea;
   --accent:#1c5cab; --accent-soft:#e3edfb; --mean:#0d366b; --trend:#c25a14; --groupmark:#14213a;
   --heat-lo:#cde2fb; --heat-hi:#0d366b; --a:#1c5cab; --b:#7a4fb3;
+  --good:#1f8a4c; --good-soft:#e2f3e8; --good-ink:#14643a; --bad:#c2412e; --bad-soft:#fbe7e3; --bad-ink:#9a2f1f;
+  --neutral:#8a94a6; --warn-soft:#fdf1d8; --warn-ink:#7a5300;
   --f-display:"Archivo","Helvetica Neue",Arial,sans-serif;
   --f-body:"Public Sans","Segoe UI",Roboto,Arial,sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
@@ -18,11 +19,11 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0e141e; --surface:#151d2a; --ink:#e7ecf4; --ink-2:#b0bccf; --muted:#8693a8; --rule:#273246;
   --accent:#6da7ec; --accent-soft:#1a2a40; --mean:#cde2fb; --trend:#f0954f; --groupmark:#ffffff;
-  --heat-lo:#184f95; --heat-hi:#d8e8fc; --a:#6da7ec; --b:#b99ae6; color-scheme:dark}}
+  --heat-lo:#184f95; --heat-hi:#d8e8fc; --a:#6da7ec; --b:#b99ae6; --good:#4cc27e; --good-soft:#163524; --good-ink:#8be0ad; --bad:#ef7a66; --bad-soft:#3a1d18; --bad-ink:#f6a99b; --neutral:#7d889c; --warn-soft:#3a2f14; --warn-ink:#f0cf86; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0e141e; --surface:#151d2a; --ink:#e7ecf4; --ink-2:#b0bccf; --muted:#8693a8; --rule:#273246;
   --accent:#6da7ec; --accent-soft:#1a2a40; --mean:#cde2fb; --trend:#f0954f; --groupmark:#ffffff;
-  --heat-lo:#184f95; --heat-hi:#d8e8fc; --a:#6da7ec; --b:#b99ae6; color-scheme:dark}
+  --heat-lo:#184f95; --heat-hi:#d8e8fc; --a:#6da7ec; --b:#b99ae6; --good:#4cc27e; --good-soft:#163524; --good-ink:#8be0ad; --bad:#ef7a66; --bad-soft:#3a1d18; --bad-ink:#f6a99b; --neutral:#7d889c; --warn-soft:#3a2f14; --warn-ink:#f0cf86; color-scheme:dark}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font:400 15px/1.55 var(--f-body);
@@ -36,7 +37,7 @@ p{margin:0}
 a{color:var(--accent)}
 .num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
 .eyebrow{font:500 .74rem/1 var(--f-body);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
-header.top{padding-block:28px 18px;display:grid;gap:14px;border-bottom:1px solid var(--rule)}
+header.top{padding-block:28px 18px;display:grid;gap:14px}
 .lede{max-width:72ch;color:var(--ink-2);font-size:1.02rem}
 .facts{display:flex;flex-wrap:wrap;gap:8px 22px;color:var(--ink-2);font-size:.9rem}
 .facts b{color:var(--ink);font-weight:600}
@@ -117,13 +118,80 @@ dt{font-weight:600;color:var(--ink)} dd{margin:0;color:var(--ink-2)}
 .scale{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr);gap:10px;align-items:center;font-size:.85rem}
 .scale .bar{height:10px;border-radius:2px;background:var(--rule);position:relative}
 .scale .bar i{position:absolute;top:-3px;height:16px;width:2px;background:var(--ink)}
+/* Pestañas */
+.tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--rule);margin-bottom:-19px}
+.tab{font:600 .95rem var(--f-body);color:var(--ink-2);text-decoration:none;padding:10px 14px;border:1px solid transparent;border-bottom:none;border-radius:8px 8px 0 0}
+.tab:hover{color:var(--accent)}
+.tab[aria-current="page"]{color:var(--ink);background:var(--bg);border-color:var(--rule);box-shadow:0 1px 0 var(--bg)}
+.intro{display:grid;gap:14px;padding-block:22px 4px}
+/* Ranking */
+.rk{margin-top:18px;display:grid;gap:16px}
+.rk-bar{display:grid;gap:12px;background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);padding:14px 16px}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:8px;overflow:hidden;width:max-content;max-width:100%}
+.seg button{font:600 .9rem var(--f-body);background:var(--bg);color:var(--ink-2);border:none;padding:8px 16px;cursor:pointer}
+.seg button[aria-selected="true"]{background:var(--accent);color:var(--surface)}
+.rk-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px 12px}
+.rk-summary{display:flex;flex-wrap:wrap;gap:10px}
+.sumcard{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);padding:10px 14px;min-width:150px;flex:1 1 150px}
+.sumcard .v{font:500 1.35rem/1.2 var(--f-mono);color:var(--ink)}
+.sumcard .l{font-size:.8rem;color:var(--ink-2)}
+.sumcard.up{border-left:4px solid var(--good)} .sumcard.dn{border-left:4px solid var(--bad)} .sumcard.eq{border-left:4px solid var(--neutral)}
+.rk-chart{margin:0;background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);padding:14px 16px;display:grid;gap:8px}
+.rk-chart figcaption{font-size:.9rem;color:var(--ink-2)}
+.rk-chartbox{position:relative;width:100%;overflow:hidden}
+#rkSvg{display:block;width:100%;height:auto}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dot.up{background:var(--good)} .dot.eq{background:var(--neutral)} .dot.dn{background:var(--bad)}
+.whisk{width:2px;height:14px;background:var(--muted);display:inline-block}
+.pill{display:inline-block;font:600 .74rem/1 var(--f-body);padding:4px 8px;border-radius:999px;white-space:nowrap;border:1px solid transparent}
+.pill.up{background:var(--good-soft);color:var(--good-ink)} .pill.dn{background:var(--bad-soft);color:var(--bad-ink)} .pill.eq{background:var(--bg);color:var(--ink-2);border-color:var(--rule)}
+.pill.warn{background:var(--warn-soft);color:var(--warn-ink)}
+.rk-table td{vertical-align:middle}
+.rk-table th.r,.rk-table td.r{text-align:right}
+button.sort{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:pointer;text-align:inherit}
+button.sort[data-dir]::after{content:attr(data-dir);margin-left:4px;color:var(--accent)}
+tr.row{cursor:pointer} tr.row:hover td{background:var(--bg)}
+tr.row.hl td{background:var(--accent-soft)}
+.nm{font-weight:600;color:var(--ink);overflow-wrap:anywhere}
+.sub{font-size:.78rem;color:var(--muted);overflow-wrap:anywhere}
+.vabar{display:grid;grid-template-columns:52px minmax(80px,1fr);gap:8px;align-items:center;min-width:170px}
+.vabar svg{width:100%;height:16px;display:block}
+.flags{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+tr.detail td{background:var(--bg);font-size:.86rem;color:var(--ink-2)}
+.det{display:grid;gap:8px;padding:4px 2px}
+.det .kvs{display:flex;flex-wrap:wrap;gap:6px 22px}
+.det .kvs b{color:var(--ink);font-family:var(--f-mono);font-weight:500}
+.pager{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-size:.86rem;color:var(--ink-2)}
+.pager button{font:500 .85rem var(--f-body);background:var(--surface);border:1px solid var(--rule);color:var(--ink);border-radius:6px;padding:6px 12px;cursor:pointer}
+.pager button:disabled{opacity:.45;cursor:default}
+@media (max-width:640px){
+  .rk-table thead{display:none}
+  .rk-table table,.rk-table tbody{display:block}
+  .rk-table tr.row{display:grid;grid-template-columns:34px 1fr auto;grid-template-areas:"p nm e" "p va va" "p res res";gap:4px 10px;padding:10px 12px;border-bottom:1px solid var(--rule)}
+  .rk-table tr.row td{padding:0;border:0;background:none}
+  .rk-table tr.row td:nth-child(1){grid-area:p} .rk-table tr.row td:nth-child(2){grid-area:nm;min-width:0}
+  .rk-table tr.row td:nth-child(3){grid-area:e;font-size:.8rem;color:var(--muted)} .rk-table tr.row td:nth-child(3)::after{content:" est."}
+  .rk-table tr.row td:nth-child(4){grid-area:va} .rk-table tr.row td:nth-child(5){grid-area:res}
+  .rk-table tr.row.hl{background:var(--accent-soft)}
+  .rk-table tr.detail{display:block} .rk-table tr.detail td{display:block;padding:10px 12px}
+  .rk-table tr.detail td:first-child{display:none}
+  .vabar{min-width:0}
+}
 footer{margin-top:40px;border-top:1px solid var(--rule);padding-top:16px;font-size:.84rem;color:var(--muted);display:grid;gap:6px}
 </style>
 
 <div class="wrap">
 <header class="top">
   <span class="eyebrow">Proyecto IVA · Politécnico Grancolombiano</span>
-  <h1>Comparador Saber 11 – Saber Pro</h1>
+  <h1>Saber 11 y Saber Pro: comparador y valor agregado</h1>
+  <nav class="tabs" aria-label="Vistas del tablero">
+    <a class="tab" href="#comparador" data-view="comparador">Comparador de puntajes</a>
+    <a class="tab" href="#ranking" data-view="ranking">Ranking de valor agregado</a>
+  </nav>
+</header>
+
+<div class="view" id="view-comparador">
+<div class="intro">
   <p class="lede">Cada estudiante presentó dos exámenes del ICFES: Saber 11 al terminar el colegio y Saber Pro al terminar la carrera. Este tablero muestra cómo se relacionan sus dos resultados. Arme dos grupos, uno en cada panel, y compárelos.</p>
   <div class="facts">
     <span><b class="num">732.148</b> estudiantes con ambos exámenes</span>
@@ -131,10 +199,10 @@ footer{margin-top:40px;border-top:1px solid var(--rule);padding-top:16px;font-si
     <span>Saber 11 <b>2010–2022</b></span>
     <span>Fuente: <b>ICFES, DataIcfes</b></span>
   </div>
-  <nav class="jump" aria-label="Secciones">
+  <nav class="jump" aria-label="Secciones del comparador">
     <a href="#como-usar">Cómo usarlo</a><a href="#como-leer">Cómo leer el gráfico</a><a href="#puntajes">Qué miden los puntajes</a><a href="#unificacion">Saber 11 en una sola escala</a><a href="#datos">De dónde salen los datos</a><a href="#limites">Límites</a><a href="#glosario">Glosario</a>
   </nav>
-</header>
+</div>
 
 <div class="status" id="status" role="status"><span class="spinner"></span><span id="statusText">Cargando los datos de 732.148 estudiantes (8,5 MB)…</span></div>
 
@@ -248,6 +316,138 @@ footer{margin-top:40px;border-top:1px solid var(--rule);padding-top:16px;font-si
     </div>
   </section>
 </main>
+</div><!-- fin vista comparador -->
+
+<div class="view" id="view-ranking" hidden>
+<div class="intro">
+  <p class="lede">¿Qué universidades y programas logran que sus estudiantes avancen más de lo esperado? El índice de valor agregado compara a los estudiantes de cada institución con estudiantes de otras instituciones que llegaron con el mismo perfil: igual Saber 11, nivel socioeconómico, estrato, educación de los padres, edad y género. La diferencia en lo que logran en Saber Pro es el valor agregado.</p>
+  <div class="facts" id="rkFacts"></div>
+  <nav class="jump" aria-label="Secciones del ranking">
+    <a href="#rk-que-es">Qué es el valor agregado</a><a href="#rk-como">Cómo se calcula</a><a href="#rk-leer">Cómo leer el índice</a><a href="#rk-limites">Límites</a><a href="#rk-tecnico">Detalles técnicos</a>
+  </nav>
+</div>
+
+<div class="status" id="rkStatus" role="status"><span class="spinner"></span><span>Cargando el ranking…</span></div>
+
+<section class="rk" id="rkApp" hidden>
+  <div class="rk-bar">
+    <div class="seg" role="tablist" aria-label="Nivel del ranking">
+      <button type="button" role="tab" id="rkLvlIes" aria-selected="true" data-lvl="ies">Universidades</button>
+      <button type="button" role="tab" id="rkLvlProg" aria-selected="false" data-lvl="prog">Programas</button>
+    </div>
+    <div class="rk-filters">
+      <div class="f"><label for="rkQ">Buscar</label><input type="search" id="rkQ" placeholder="Nombre de universidad o programa" autocomplete="off"></div>
+      <div class="f" data-only="ies"><label for="rkOrigen">Sector</label><select id="rkOrigen"></select></div>
+      <div class="f" data-only="ies"><label for="rkCaracter">Tipo de institución</label><select id="rkCaracter"></select></div>
+      <div class="f" data-only="prog"><label for="rkIes">Universidad</label><select id="rkIes"></select></div>
+      <div class="f" data-only="prog"><label for="rkNbc">Núcleo básico del conocimiento</label><select id="rkNbc"></select></div>
+      <div class="f" data-only="prog"><label for="rkMod">Modalidad</label><select id="rkMod"></select></div>
+      <div class="f"><label for="rkCat">Resultado</label><select id="rkCat">
+        <option value="">Todos</option><option value="arriba">Por encima de lo esperado</option><option value="igual">Sin diferencia clara</option><option value="abajo">Por debajo de lo esperado</option></select></div>
+      <div class="f"><label for="rkConf">Confiabilidad</label><select id="rkConf">
+        <option value="sin">Solo resultados sin advertencias</option><option value="">Todos, incluso con advertencias</option></select></div>
+    </div>
+  </div>
+
+  <div class="rk-summary" id="rkSummary"></div>
+
+  <figure class="rk-chart">
+    <figcaption id="rkChartCap"></figcaption>
+    <div class="rk-chartbox" id="rkChartBox"><svg id="rkSvg" role="img"></svg><div class="tip" id="rkTip" hidden></div></div>
+    <div class="legend">
+      <span class="lg"><span class="dot up"></span>Por encima de lo esperado</span>
+      <span class="lg"><span class="dot eq"></span>Sin diferencia clara</span>
+      <span class="lg"><span class="dot dn"></span>Por debajo de lo esperado</span>
+      <span class="lg"><span class="whisk"></span>Rango probable (intervalo de confianza del 95%)</span>
+    </div>
+  </figure>
+
+  <div class="tbl rk-table">
+    <table>
+      <thead><tr>
+        <th><button type="button" class="sort" data-k="p">Puesto</button></th>
+        <th><button type="button" class="sort" data-k="n">Nombre</button></th>
+        <th class="r"><button type="button" class="sort" data-k="e">Estudiantes</button></th>
+        <th><button type="button" class="sort" data-k="a">Valor agregado</button></th>
+        <th>Resultado</th>
+      </tr></thead>
+      <tbody id="rkBody"></tbody>
+    </table>
+  </div>
+  <div class="pager" id="rkPager"></div>
+</section>
+
+<main class="guide">
+  <section class="sec" id="rk-que-es">
+    <h2>Qué es el valor agregado</h2>
+    <div class="body">
+      <p>Comparar universidades solo por el puntaje de Saber Pro es injusto: una institución que recibe estudiantes con muy buen Saber 11 obtendrá buenos resultados aunque aporte poco, y otra que recibe estudiantes con menos preparación puede aportar mucho aunque su promedio sea bajo.</p>
+      <p>El <b>valor agregado</b> busca separar esas dos cosas. Pregunta: <b>¿cuánto mejor (o peor) les va en Saber Pro a los estudiantes de esta institución que a estudiantes muy parecidos que estudiaron en otra?</b> Si les va mejor, la institución agregó más; si les va igual, agregó lo esperado; si les va peor, agregó menos.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="rk-como">
+    <h2>Cómo se calcula</h2>
+    <div class="body">
+      <ol>
+        <li><b>Avance de cada estudiante.</b> Se pone cada examen en una escala común (desviaciones frente al promedio nacional) y se resta: avance = Saber Pro − Saber 11. Saber Pro se compara con los estudiantes del mismo año.</li>
+        <li><b>Perfil de entrada.</b> Para cada estudiante se toman las características que tenía antes de entrar o que no dependen de la institución: Saber 11, índice socioeconómico del ICFES, estrato, educación del padre y de la madre, internet en casa, si el colegio era rural, edad, género y año de Saber Pro. En el ranking de universidades también se tiene en cuenta el núcleo de conocimiento del programa (no es lo mismo estudiar medicina que contaduría).</li>
+        <li><b>Gemelos estadísticos.</b> Para cada estudiante de la institución evaluada se busca, entre estudiantes de otras instituciones, el que tenga el perfil más parecido. Se usa el método de <i>propensity score matching</i> (emparejamiento por puntaje de propensión). En programas, los gemelos se buscan solo entre estudiantes del mismo núcleo de conocimiento y con la modalidad como parte del perfil.</li>
+        <li><b>Comparación.</b> Se compara el avance de los estudiantes de la institución con el de sus gemelos. La diferencia promedio es el índice de valor agregado.</li>
+        <li><b>Rango probable.</b> Como todo cálculo con datos, el índice tiene un margen de error. Se calcula un intervalo de confianza del 95%: el rango donde muy probablemente está el valor real.</li>
+      </ol>
+      <p>Sigue la metodología del modelo 2 del informe IVA del Politécnico y del <a href="http://www.scielo.org.co/pdf/rcde/n99/0120-3916-rcde-99-e22105.pdf" target="_blank" rel="noopener">artículo de referencia de la Revista Colombiana de Educación (n.º 99)</a>, actualizada con los datos de Saber Pro 2022–2025.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="rk-leer">
+    <h2>Cómo leer el índice</h2>
+    <div class="body">
+      <p>El índice está en <b>desviaciones estándar</b> de Saber Pro. Para hacerlo concreto: <b>0,10 equivale a unos 2,5 puntos del puntaje global de Saber Pro</b> (escala de 0 a 300).</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Índice</th><th>Qué significa</th></tr></thead>
+        <tbody>
+          <tr><td class="n">+0,20</td><td>Sus estudiantes sacan en Saber Pro unos 5 puntos más que estudiantes con el mismo perfil de entrada en otras instituciones.</td></tr>
+          <tr><td class="n">0</td><td>Les va igual que a estudiantes parecidos de otras instituciones.</td></tr>
+          <tr><td class="n">−0,20</td><td>Sacan unos 5 puntos menos que estudiantes parecidos de otras instituciones.</td></tr>
+        </tbody>
+      </table></div>
+      <p><b>Las etiquetas</b> usan el rango probable. <span class="pill up">Por encima de lo esperado</span> significa que todo el rango está sobre cero; <span class="pill dn">Por debajo de lo esperado</span>, que todo está bajo cero; <span class="pill eq">Sin diferencia clara</span>, que el rango incluye el cero y no se puede afirmar que sea distinta de lo esperado. Dos instituciones cuyos rangos se cruzan no se pueden ordenar con seguridad, aunque tengan puestos distintos.</p>
+      <p><b>Las advertencias</b> señalan resultados que conviene leer con cuidado: <span class="pill warn">Emparejamiento imperfecto</span> cuando los gemelos no quedaron tan parecidos como se busca (en alguna característica la diferencia entre los dos grupos sigue siendo apreciable, o en Saber 11 no quedó prácticamente en cero), y <span class="pill warn">Cobertura parcial</span> cuando menos del 80% de los estudiantes encontró un gemelo, de modo que el índice describe solo a una parte del grupo.</p>
+      <p><b>Por defecto se muestran solo los resultados sin advertencias</b>, que son los más confiables. Con el filtro <i>Confiabilidad</i> se pueden ver todos. El puesto de cada fila es el de la lista completa, por eso puede haber saltos en la numeración.</p>
+      <p>Al hacer clic en una fila se ve el detalle: cuántos estudiantes se compararon, sus promedios en las dos pruebas y una frase que resume el resultado.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="rk-limites">
+    <h2>Límites</h2>
+    <div class="body">
+      <ul>
+        <li><b>No es una medida completa de calidad.</b> Solo mira pruebas estandarizadas de competencias genéricas; no incluye empleabilidad, investigación, formación específica de cada carrera ni bienestar.</li>
+        <li><b>Solo corrige lo que se puede medir.</b> Si los estudiantes de una institución difieren en algo que no está en los datos (motivación, por ejemplo), parte de esa diferencia puede quedar en el índice.</li>
+        <li><b>Solo entran estudiantes con los dos exámenes</b> y con Saber 11 desde 2010; en programas a distancia y virtuales con muchos estudiantes mayores, el índice describe a la parte más joven del grupo.</li>
+        <li><b>Grupos pequeños, rangos anchos.</b> Se evaluaron instituciones y programas con al menos 30 estudiantes; aun así, los programas pequeños tienen márgenes de error grandes.</li>
+        <li><b>Es un promedio.</b> Dentro de una misma institución hay estudiantes a los que les va mucho mejor o peor que el índice.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" id="rk-tecnico">
+    <h2>Detalles técnicos</h2>
+    <div class="body" id="rkTech">
+      <ul>
+        <li><b>Resultado:</b> VA = z(Saber Pro global, estandarizado por año) − z(Saber 11 global en la escala unificada).</li>
+        <li><b>Puntaje de propensión:</b> regresión logística de pertenecer a la institución (o programa) evaluada. Covariables: Saber 11 (z), INSE individual (con indicador de dato faltante), estrato, educación del padre y de la madre (4 niveles + sin dato), internet, colegio rural, grupo de edad, género y año de Saber Pro; en universidades además el núcleo básico del conocimiento, y en programas la modalidad (con controles solo del mismo núcleo).</li>
+        <li><b>Emparejamiento:</b> vecino más cercano 1:1 con reemplazo sobre el logit del puntaje de propensión, con <b>caliper</b> de 0,2 desviaciones estándar (los estudiantes sin un gemelo dentro de esa distancia quedan fuera). Grupo de control: hasta 100.000 estudiantes de otras instituciones, elegidos al azar.</li>
+        <li><b>Efecto:</b> efecto promedio sobre los tratados (ATT), estimado con una regresión ponderada del avance sobre la muestra emparejada que incluye las mismas covariables; error estándar robusto (HC1) e intervalo del 95%.</li>
+        <li><b>Balance:</b> diferencias estandarizadas de medias de todas las covariables antes y después de emparejar. Criterio del tablero: ninguna supera 0,25 y la de Saber 11 no supera 0,1 (en grupos pequeños las diferencias estandarizadas fluctúan mucho por azar, por eso el criterio estricto de 0,1 en todas se reporta aparte).</li>
+        <li id="rkTechNums"></li>
+        <li><b>Reproducibilidad:</b> todo el proceso está en el script <span class="num">preparacion_datos_IVA.R</span> (parte F), que usa los paquetes MatchIt y cobalt de R.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+</div><!-- fin vista ranking -->
 
 <footer>
   <span>Proyecto IVA (valor agregado en educación superior) · Facultad de Ingeniería, Diseño e Innovación y Escuela de Ciencias Básicas, Politécnico Grancolombiano.</span>
@@ -624,6 +824,214 @@ load().then(()=>{
   t.textContent="No se pudieron cargar los datos. "+(err&&err.message?err.message:"")+" Recargue la página; si el problema sigue, avise al equipo del proyecto IVA.";
   s.append(t);
 });
+})();
+</script>
+
+<script>
+/* ---------- Pestañas y ranking de valor agregado ---------- */
+(() => {
+"use strict";
+const $ = (s,el=document)=>el.querySelector(s);
+const fmt = new Intl.NumberFormat("es-CO");
+const f2 = new Intl.NumberFormat("es-CO",{minimumFractionDigits:2,maximumFractionDigits:2,signDisplay:"exceptZero"});
+const f1 = new Intl.NumberFormat("es-CO",{minimumFractionDigits:1,maximumFractionDigits:1});
+const PTS_POR_DE = 25;   // 1 desviación estándar de Saber Pro global ≈ 25 puntos (2022–2025)
+const POLI = 2725;
+
+/* Rutas: #comparador, #ranking o el id de una sección */
+function show(v){
+  $("#view-comparador").hidden = v!=="comparador";
+  $("#view-ranking").hidden = v!=="ranking";
+  document.querySelectorAll(".tab").forEach(t=>{ if(t.dataset.view===v) t.setAttribute("aria-current","page"); else t.removeAttribute("aria-current"); });
+  if(v==="ranking" && !R.loaded) loadRanking();
+  if(v==="ranking" && R.loaded) drawChart();
+}
+function route(){
+  const h = decodeURIComponent(location.hash.slice(1));
+  let v = "comparador";
+  if(h==="ranking") v="ranking";
+  else if(h && h!=="comparador"){ const el=document.getElementById(h); if(el && el.closest("#view-ranking")) v="ranking"; }
+  show(v);
+  if(h && h!=="ranking" && h!=="comparador"){ const el=document.getElementById(h); if(el) requestAnimationFrame(()=>el.scrollIntoView({block:"start"})); }
+}
+window.addEventListener("hashchange", route);
+
+/* Estado del ranking */
+const R = {loaded:false, data:null, lvl:"ies", sortK:"a", sortDir:-1, page:0, open:null, filtered:[]};
+const PAGE = 25;
+const cat = r => r.li>0 ? "arriba" : (r.ls<0 ? "abajo" : "igual");
+const CAT_TXT = {arriba:"Por encima de lo esperado", igual:"Sin diferencia clara", abajo:"Por debajo de lo esperado"};
+const CAT_CLS = {arriba:"up", igual:"eq", abajo:"dn"};
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+async function loadRanking(){
+  R.loaded = true;
+  try{
+    const r = await fetch("iva.json"); if(!r.ok) throw new Error("No se encontró el archivo del ranking.");
+    R.data = await r.json();
+  }catch(e){
+    const st=$("#rkStatus"); st.classList.add("err"); st.textContent="No se pudo cargar el ranking. "+e.message+" Recargue la página.";
+    return;
+  }
+  const D=R.data, S=D.resumen;
+  $("#rkFacts").innerHTML = `<span><b class="num">${fmt.format(S.ies_evaluadas)}</b> universidades evaluadas</span><span><b class="num">${fmt.format(S.programas_evaluados)}</b> programas evaluados</span><span>Saber Pro <b>2022–2025</b></span><span>Mínimo <b>${S.min_n}</b> estudiantes por institución o programa</span>`;
+  const n2=new Intl.NumberFormat("es-CO",{maximumFractionDigits:2});
+  $("#rkTechNums").innerHTML = `<b>Resultados de esta corrida:</b> cumplen el criterio de balance del tablero ${fmt.format(S.ies_balance_ok)} de ${fmt.format(S.ies_evaluadas)} universidades y ${fmt.format(S.programas_balance_ok)} de ${fmt.format(S.programas_evaluados)} programas; con el criterio estricto (todas ≤ 0,1), ${fmt.format(S.ies_balance_estricto)} universidades y ${fmt.format(S.programas_balance_estricto)} programas. La diferencia estandarizada típica en Saber 11 entre una universidad y el resto pasó de ${n2.format(S.smd_s11_mediana_antes)} antes de emparejar a ${n2.format(S.smd_s11_mediana_despues)} después (${n2.format(S.programas_smd_s11_mediana_despues)} en programas). El índice por universidad tiene una correlación de ${n2.format(S.cor_psm_vs_simple)} con un valor agregado calculado por regresión simple y de ${n2.format(S.cor_psm_vs_sens_trabajo)} con una versión que además tiene en cuenta las horas de trabajo semanales; esta última cambia sobre todo en instituciones pequeñas.`;
+  // opciones de filtros
+  const opt=(sel,vals,all)=>{ sel.innerHTML=`<option value="">${all}</option>`+vals.map(v=>`<option>${esc(v)}</option>`).join(""); };
+  const uniq=(arr,k)=>[...new Set(arr.map(x=>x[k]).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
+  opt($("#rkOrigen"), uniq(D.ies,"o"), "Todos");
+  opt($("#rkCaracter"), uniq(D.ies,"k"), "Todos");
+  opt($("#rkIes"), uniq(D.programas,"i"), "Todas");
+  opt($("#rkNbc"), uniq(D.programas,"nb"), "Todos");
+  opt($("#rkMod"), uniq(D.programas,"md"), "Todas");
+  ["rkQ","rkOrigen","rkCaracter","rkIes","rkNbc","rkMod","rkCat","rkConf"].forEach(id=>$("#"+id).addEventListener(id==="rkQ"?"input":"change",()=>{R.page=0; R.open=null; render();}));
+  document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{
+    R.lvl=b.dataset.lvl; R.page=0; R.open=null; R.sortK="a"; R.sortDir=-1;
+    document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-selected", x===b?"true":"false"));
+    render();
+  }));
+  document.querySelectorAll("button.sort").forEach(b=>b.addEventListener("click",()=>{
+    const k=b.dataset.k; if(R.sortK===k) R.sortDir*=-1; else {R.sortK=k; R.sortDir=(k==="n"||k==="p")?1:-1;}
+    R.page=0; render();
+  }));
+  $("#rkBody").addEventListener("click",e=>{
+    const tr=e.target.closest("tr.row"); if(!tr) return;
+    R.open = R.open===tr.dataset.id ? null : tr.dataset.id; renderTable();
+  });
+  $("#rkBody").addEventListener("keydown",e=>{ if((e.key==="Enter"||e.key===" ") && e.target.matches("tr.row")){ e.preventDefault(); e.target.click(); }});
+  $("#rkStatus").hidden=true; $("#rkApp").hidden=false;
+  new ResizeObserver(()=>drawChart()).observe($("#rkChartBox"));
+  render();
+}
+function esc(t){return String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+
+function rows(){
+  const D=R.data, q=$("#rkQ").value.trim().toLowerCase(), c=$("#rkCat").value;
+  let list = R.lvl==="ies" ? D.ies : D.programas;
+  document.querySelectorAll("[data-only]").forEach(el=>el.hidden = el.dataset.only!==R.lvl);
+  if(R.lvl==="ies"){
+    const o=$("#rkOrigen").value, k=$("#rkCaracter").value;
+    list = list.filter(r=>(!o||r.o===o)&&(!k||r.k===k)&&(!q||r.n.toLowerCase().includes(q)));
+  } else {
+    const i=$("#rkIes").value, nb=$("#rkNbc").value, md=$("#rkMod").value;
+    list = list.filter(r=>(!i||r.i===i)&&(!nb||r.nb===nb)&&(!md||r.md===md)&&(!q||r.n.toLowerCase().includes(q)||r.i.toLowerCase().includes(q)));
+  }
+  if(c) list = list.filter(r=>cat(r)===c);
+  if($("#rkConf").value==="sin") list = list.filter(r=>r.b && r.pe>=80);
+  return list;
+}
+function render(){
+  R.filtered = rows();
+  const L=R.filtered, n=L.length, cnt={arriba:0,igual:0,abajo:0}; L.forEach(r=>cnt[cat(r)]++);
+  const what = R.lvl==="ies" ? (n===1?"universidad":"universidades") : (n===1?"programa":"programas");
+  $("#rkSummary").innerHTML =
+    `<div class="sumcard"><div class="v">${fmt.format(n)}</div><div class="l">${what} en la selección</div></div>`+
+    `<div class="sumcard up"><div class="v">${fmt.format(cnt.arriba)}</div><div class="l">por encima de lo esperado</div></div>`+
+    `<div class="sumcard eq"><div class="v">${fmt.format(cnt.igual)}</div><div class="l">sin diferencia clara</div></div>`+
+    `<div class="sumcard dn"><div class="v">${fmt.format(cnt.abajo)}</div><div class="l">por debajo de lo esperado</div></div>`;
+  drawChart(); renderTable();
+}
+
+/* Gráfico de oruga: cada punto es una institución o programa, ordenados por índice */
+function drawChart(){
+  if(!R.data || $("#view-ranking").hidden) return;
+  const svg=$("#rkSvg"), box=$("#rkChartBox"), tip=$("#rkTip");
+  const L=[...R.filtered].sort((a,b)=>b.a-a.a), n=L.length;
+  const W=Math.max(300, box.clientWidth), H=Math.round(Math.min(380, Math.max(240, W*0.42)));
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`); svg.style.height=H+"px";
+  const what = R.lvl==="ies" ? "universidades" : "programas";
+  $("#rkChartCap").textContent = n ? `Índice de valor agregado de ${fmt.format(n)} ${what}, de mayor a menor. Cada punto es ${R.lvl==="ies"?"una universidad":"un programa"}; la línea vertical muestra su rango probable. Pase el cursor para ver el nombre.` : "No hay resultados con estos filtros.";
+  if(!n){ svg.innerHTML=""; svg.setAttribute("aria-label","Sin resultados"); return; }
+  const ink2=css("--ink-2"), muted=css("--muted"), rule=css("--rule"), good=css("--good"), bad=css("--bad"), neu=css("--neutral"), ink=css("--ink"), surf=css("--surface");
+  const showCI = n<=700;
+  let lo=Math.min(...L.map(r=>showCI?r.li:r.a)), hi=Math.max(...L.map(r=>showCI?r.ls:r.a));
+  lo=Math.min(lo,-0.1); hi=Math.max(hi,0.1);
+  const padL=46,padR=10,padT=14,padB=30, w=W-padL-padR, h=H-padT-padB;
+  const x=i=>padL+(n===1?w/2:(i/(n-1))*w), y=v=>padT+(hi-v)/(hi-lo)*h;
+  const ticks=nice(lo,hi,5);
+  let g=`<g font-family="${css("--f-mono")}" font-size="11" fill="${muted}">`;
+  for(const t of ticks){ const Y=y(t).toFixed(1); g+=`<line x1="${padL}" x2="${W-padR}" y1="${Y}" y2="${Y}" stroke="${rule}" stroke-width="1"/><text x="${padL-6}" y="${Y}" text-anchor="end" dominant-baseline="middle">${f2.format(t)}</text>`; }
+  g+=`</g><line x1="${padL}" x2="${W-padR}" y1="${y(0).toFixed(1)}" y2="${y(0).toFixed(1)}" stroke="${ink}" stroke-width="1.5"/>`;
+  g+=`<text x="${W-padR}" y="${(y(0)-5).toFixed(1)}" text-anchor="end" font-size="11" fill="${ink2}" font-family="${css("--f-body")}">0 = lo esperado</text>`;
+  g+=`<text x="${padL+w/2}" y="${H-6}" text-anchor="middle" font-size="12" fill="${ink2}" font-family="${css("--f-body")}">${R.lvl==="ies"?"Universidades":"Programas"} ${W<520?"de mayor a menor":"ordenados de mayor a menor valor agregado"}</text>`;
+  const col=r=>({arriba:good,igual:neu,abajo:bad})[cat(r)];
+  const rad = n>1500?1.6:(n>400?2.4:3.6);
+  let marks="";
+  L.forEach((r,i)=>{
+    const X=x(i).toFixed(1), c=col(r);
+    if(showCI) marks+=`<line x1="${X}" x2="${X}" y1="${y(r.ls).toFixed(1)}" y2="${y(r.li).toFixed(1)}" stroke="${c}" stroke-opacity=".45" stroke-width="${n>250?1:1.5}"/>`;
+  });
+  L.forEach((r,i)=>{
+    const X=x(i), Y=y(r.a), c=col(r), k=cat(r);
+    if(k==="arriba") marks+=`<path d="M${X} ${Y-rad*1.2} L${X+rad*1.1} ${Y+rad*.8} L${X-rad*1.1} ${Y+rad*.8}Z" fill="${c}"/>`;
+    else if(k==="abajo") marks+=`<path d="M${X} ${Y+rad*1.2} L${X+rad*1.1} ${Y-rad*.8} L${X-rad*1.1} ${Y-rad*.8}Z" fill="${c}"/>`;
+    else marks+=`<circle cx="${X}" cy="${Y}" r="${rad}" fill="${c}"/>`;
+  });
+  // resaltar el Poli
+  let hl="";
+  const esPoli = r => R.lvl==="ies" ? r.c===POLI : r.ci===POLI, mixto = L.some(r=>!esPoli(r));
+  L.forEach((r,i)=>{ const isPoli = mixto && esPoli(r);
+    if(isPoli && (R.lvl==="ies" || L.length<=400)){ const X=x(i),Y=y(r.a); hl+=`<circle cx="${X}" cy="${Y}" r="${rad+4}" fill="none" stroke="${ink}" stroke-width="1.5"/>`;
+      const right = X > padL+w*0.7; if(R.lvl==="ies") hl+=`<text x="${right?X-8:X+8}" y="${Y-8}" text-anchor="${right?"end":"start"}" font-size="11" font-weight="600" fill="${ink}" font-family="${css("--f-body")}" stroke="${surf}" stroke-width="3" paint-order="stroke">Politécnico Grancolombiano</text>`; }});
+  svg.innerHTML = g+marks+hl+`<rect x="${padL}" y="${padT}" width="${w}" height="${h}" fill="transparent" id="rkHit"/>`;
+  svg.setAttribute("aria-label",`Gráfico de ${n} ${what} ordenados por índice de valor agregado, desde ${f2.format(L[0].a)} hasta ${f2.format(L[n-1].a)}.`);
+  const hit=$("#rkHit");
+  const move=e=>{
+    const rc=svg.getBoundingClientRect(); const px=(e.clientX-rc.left)*W/rc.width;
+    let i=Math.round((px-padL)/w*(n-1)); i=Math.max(0,Math.min(n-1,i));
+    const r=L[i]; tip.hidden=false;
+    tip.style.left=(x(i)*rc.width/W)+"px"; tip.style.top=(y(r.a)*rc.height/H)+"px";
+    tip.textContent=`${r.n}${R.lvl==="prog"?" · "+r.i:""} · índice ${f2.format(r.a)} (${f2.format(r.li)} a ${f2.format(r.ls)})`;
+  };
+  hit.addEventListener("pointermove",move); hit.addEventListener("pointerdown",move);
+  hit.addEventListener("pointerleave",()=>tip.hidden=true);
+}
+function nice(a,b,n){ const span=b-a, raw=span/n, mag=Math.pow(10,Math.floor(Math.log10(raw))); const step=[1,2,2.5,5,10].map(m=>m*mag).find(s=>span/s<=n)||raw; const out=[]; for(let v=Math.ceil(a/step)*step; v<=b+1e-9; v+=step) out.push(Math.round(v*1000)/1000); return out; }
+
+function renderTable(){
+  const L=[...R.filtered], k=R.sortK, d=R.sortDir;
+  L.sort((a,b)=> k==="n" ? d*a.n.localeCompare(b.n,"es") : d*((a[k]??0)-(b[k]??0)));
+  const pages=Math.max(1,Math.ceil(L.length/PAGE)); if(R.page>=pages) R.page=pages-1;
+  const slice=L.slice(R.page*PAGE,(R.page+1)*PAGE);
+  const mixtoT = L.some(r=>(R.lvl==="ies"? r.c : r.ci)!==POLI);
+  const all = R.lvl==="ies"?R.data.ies:R.data.programas;
+  const ext = Math.max(0.3, ...all.map(r=>Math.max(Math.abs(r.li),Math.abs(r.ls))).sort((a,b)=>a-b).slice(Math.floor(all.length*0.02), Math.ceil(all.length*0.98)));
+  const bar = r=>{ const W=100, sx=v=>Math.max(0,Math.min(W,(v+ext)/(2*ext)*W)); const c=css(({arriba:"--good",igual:"--neutral",abajo:"--bad"})[cat(r)]);
+    return `<svg viewBox="0 0 ${W} 16" preserveAspectRatio="none" aria-hidden="true"><line x1="0" x2="${W}" y1="8" y2="8" stroke="${css("--rule")}" stroke-width="1"/><line x1="${W/2}" x2="${W/2}" y1="1" y2="15" stroke="${css("--ink-2")}" stroke-width="1"/><line x1="${sx(r.li)}" x2="${sx(r.ls)}" y1="8" y2="8" stroke="${c}" stroke-width="2" stroke-opacity=".55"/><rect x="${sx(r.a)-2.5}" y="3" width="5" height="10" rx="1.5" fill="${c}"/></svg>`; };
+  const flags = r=>{ const f=[]; if(!r.b) f.push(`<span class="pill warn">Emparejamiento imperfecto</span>`); if(r.pe<80) f.push(`<span class="pill warn">Cobertura parcial</span>`); return f.length?`<div class="flags">${f.join("")}</div>`:""; };
+  let html="";
+  for(const r of slice){
+    const id=String(r.c), isPoli = mixtoT && (R.lvl==="ies"? r.c===POLI : r.ci===POLI);
+    const sub = R.lvl==="ies" ? `${esc(r.o||"")}${r.k?" · "+esc(r.k):""}` : `${esc(r.i)} · ${esc(r.md)} · ${esc(r.sd)}`;
+    html+=`<tr class="row${isPoli?" hl":""}" data-id="${id}" tabindex="0" aria-expanded="${R.open===id}"><td class="n">${r.p}</td><td><div class="nm">${esc(r.n)}</div><div class="sub">${sub}</div></td><td class="r num">${fmt.format(r.e)}</td><td><div class="vabar"><span class="num">${f2.format(r.a)}</span>${bar(r)}</div></td><td><span class="pill ${CAT_CLS[cat(r)]}">${CAT_TXT[cat(r)]}</span>${flags(r)}</td></tr>`;
+    if(R.open===id) html+=`<tr class="detail"><td></td><td colspan="4">${detail(r)}</td></tr>`;
+  }
+  $("#rkBody").innerHTML = html || `<tr><td colspan="5">No hay resultados con estos filtros.</td></tr>`;
+  document.querySelectorAll("button.sort").forEach(b=>{ if(b.dataset.k===R.sortK) b.dataset.dir = R.sortDir>0?"↑":"↓"; else delete b.dataset.dir; });
+  const pg=$("#rkPager");
+  pg.innerHTML = L.length>PAGE ? `<span>Mostrando ${fmt.format(R.page*PAGE+1)}–${fmt.format(Math.min(L.length,(R.page+1)*PAGE))} de ${fmt.format(L.length)}</span><span><button type="button" id="rkPrev" ${R.page===0?"disabled":""}>Anterior</button> <button type="button" id="rkNext" ${R.page>=pages-1?"disabled":""}>Siguiente</button></span>` : `<span>${fmt.format(L.length)} resultado${L.length===1?"":"s"}</span>`;
+  $("#rkPrev")?.addEventListener("click",()=>{R.page--; R.open=null; renderTable();});
+  $("#rkNext")?.addEventListener("click",()=>{R.page++; R.open=null; renderTable();});
+}
+function detail(r){
+  const k=cat(r), pts=f1.format(Math.abs(r.a)*PTS_POR_DE), quien = R.lvl==="ies"?"Sus estudiantes":"Los estudiantes de este programa";
+  let frase;
+  if(k==="arriba") frase=`${quien} obtienen en Saber Pro, en promedio, unos <b>${pts} puntos más</b> que estudiantes con el mismo perfil de entrada en otras instituciones.`;
+  else if(k==="abajo") frase=`${quien} obtienen en Saber Pro, en promedio, unos <b>${pts} puntos menos</b> que estudiantes con el mismo perfil de entrada en otras instituciones.`;
+  else frase=`${quien} obtienen en Saber Pro resultados <b>similares</b> a los de estudiantes con el mismo perfil de entrada en otras instituciones: la diferencia (unos ${pts} puntos) no es clara, porque el rango probable incluye el cero.`;
+  const extra = R.lvl==="ies"
+    ? `<span>En programas a distancia o virtuales: <b>${f1.format(r.vd)}%</b></span>${r.at!=null?`<span>Índice si además se tiene en cuenta el trabajo: <b>${f2.format(r.at)}</b></span>`:""}`
+    : `<span>Núcleo: <b>${esc(r.nb)}</b></span><span>Código SNIES: <b>${r.c}</b></span>`;
+  return `<div class="det"><p>${frase} Índice ${f2.format(r.a)}; rango probable ${f2.format(r.li)} a ${f2.format(r.ls)}.</p>
+    <div class="kvs"><span>Estudiantes evaluados: <b>${fmt.format(r.e)}</b></span><span>Con gemelo estadístico: <b>${fmt.format(r.m)}</b> (${f1.format(r.pe)}%)</span><span>Promedio Saber 11: <b>${f1.format(r.s11)}</b></span><span>Promedio Saber Pro: <b>${f1.format(r.sp)}</b></span>${extra}</div>
+    ${!r.b?`<p>Los gemelos no quedaron tan parecidos como se busca en alguna característica; tome el resultado con precaución.</p>`:""}
+    ${r.pe<80?`<p>Solo ${f1.format(r.pe)}% de los estudiantes encontró un gemelo; el índice describe a esa parte del grupo.</p>`:""}</div>`;
+}
+
+route();
+new MutationObserver(()=>{ if(R.loaded && R.data) render(); }).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change",()=>{ if(R.loaded && R.data) render(); });
 })();
 </script>
 </body></html>
