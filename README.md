@@ -15,3 +15,9 @@ Fuente: datos abiertos del ICFES (DataIcfes) y archivo oficial de cruce Saber 11
 Índice de valor agregado por universidad y por programa, calculado con emparejamiento por puntaje de propensión (propensity score matching). Cada estudiante de una institución se compara con un "gemelo estadístico" de otra institución con igual Saber 11, nivel socioeconómico, estrato, educación de los padres, acceso a internet, zona, edad, género y año de la prueba (más el núcleo del conocimiento para universidades, y la modalidad para programas, cuyos gemelos salen del mismo núcleo en otras instituciones). Vecino más cercano 1:1 con reemplazo, caliper de 0,2 desviaciones estándar del logit del puntaje de propensión; el índice es el efecto promedio sobre los tratados (ATT) estimado con regresión ponderada y errores robustos (HC1).
 
 - `iva.json`: resultados del ranking que lee la pestaña.
+
+## Conflicto y ruralidad (pestaña `#multinivel`)
+
+Modelo lineal mixto de clasificación cruzada (municipio del colegio × institución) que estima la brecha en el avance Saber 11 → Saber Pro de los estudiantes de municipios PDET (Decreto Ley 893 de 2017) y ZOMAC (Decreto 1650 de 2017), y de colegios rurales, frente a estudiantes comparables. Estimado con `lme4` (partes G, H e I de `preparacion_datos_IVA.R`).
+
+- `multinivel.json`: brechas por modelo, componentes de varianza, pruebas de razón de verosimilitud, coeficientes y efectos aleatorios por municipio.

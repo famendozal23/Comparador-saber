@@ -177,6 +177,46 @@ tr.detail td{background:var(--bg);font-size:.86rem;color:var(--ink-2)}
   .rk-table tr.detail td:first-child{display:none}
   .vabar{min-width:0}
 }
+/* Multinivel */
+.ml-keys{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:6px}
+.ml-key{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);padding:14px 16px;display:grid;gap:4px;align-content:start;border-left:4px solid var(--kc,var(--neutral))}
+.ml-key.dn{--kc:var(--bad)} .ml-key.up{--kc:var(--good)} .ml-key.ac{--kc:var(--accent)}
+.ml-key .v{font:500 1.6rem/1.15 var(--f-mono);color:var(--ink)}
+.ml-key .l{font-size:.86rem;color:var(--ink-2)}
+.ml-key .l b{color:var(--ink)}
+.sec .body.wide{max-width:none}
+.sec .body h3{margin-top:10px}
+.eq{overflow-x:auto;overflow-y:hidden;background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);padding:10px 14px;color:var(--ink);max-width:100%}
+.words{border-left:3px solid var(--accent);padding:4px 0 4px 12px;color:var(--ink-2)}
+.words b{color:var(--ink)}
+.ml-fig{margin:0;background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);padding:14px 16px;display:grid;gap:12px;min-width:0}
+.ml-fig figcaption{font-size:.9rem;color:var(--ink-2)}
+.ml-fig svg{display:block;width:100%;height:auto}
+.ml-fig h3{font-size:.92rem;margin-bottom:6px}
+.ml-legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.82rem;color:var(--ink-2);align-items:center}
+.ml-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.ml-grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:18px}
+.vbar{display:flex;height:22px;border-radius:4px;overflow:hidden;gap:2px;background:var(--surface)}
+.vbar span{display:block;height:100%}
+.vrow{display:grid;grid-template-columns:minmax(0,170px) minmax(0,1fr);gap:10px;align-items:start;font-size:.86rem;color:var(--ink-2)}
+@media (max-width:560px){.vrow{grid-template-columns:minmax(0,1fr)}}
+.ml-tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px 12px}
+.ml-tools label{display:block;font-size:.8rem;color:var(--ink-2);margin-bottom:4px}
+.ml-tools input,.ml-tools select{width:100%;font:400 .9rem var(--f-body);padding:7px 9px;border:1px solid var(--rule);border-radius:6px;background:var(--surface);color:var(--ink)}
+.mtab td{vertical-align:middle}
+.mtab td.r,.mtab th.r{text-align:right}
+th.r{text-align:right}
+details.more{border:1px solid var(--rule);border-radius:var(--r);background:var(--surface);padding:10px 14px}
+details.more summary{cursor:pointer;font-weight:600;color:var(--ink)}
+details.more[open] summary{margin-bottom:10px}
+@media (max-width:640px){
+  .mtab thead{display:none}
+  .mtab table,.mtab tbody{display:block}
+  .mtab tr{display:grid;grid-template-columns:1fr auto;gap:6px 10px;padding:10px 12px;border-bottom:1px solid var(--rule)}
+  .mtab td{padding:0;border:0}
+  .mtab td:nth-child(1){grid-column:1/-1} .mtab td:nth-child(4){grid-column:1/-1}
+  .mtab td:nth-child(3)::after{content:" est."}
+}
 footer{margin-top:40px;border-top:1px solid var(--rule);padding-top:16px;font-size:.84rem;color:var(--muted);display:grid;gap:6px}
 </style>
 
@@ -187,6 +227,7 @@ footer{margin-top:40px;border-top:1px solid var(--rule);padding-top:16px;font-si
   <nav class="tabs" aria-label="Vistas del tablero">
     <a class="tab" href="#comparador" data-view="comparador">Comparador de puntajes</a>
     <a class="tab" href="#ranking" data-view="ranking">Ranking de valor agregado</a>
+    <a class="tab" href="#multinivel" data-view="multinivel">Conflicto y ruralidad</a>
   </nav>
 </header>
 
@@ -438,7 +479,7 @@ footer{margin-top:40px;border-top:1px solid var(--rule);padding-top:16px;font-si
       <ul>
         <li><b>Resultado:</b> VA = z(Saber Pro global, estandarizado por año) − z(Saber 11 global en la escala unificada).</li>
         <li><b>Puntaje de propensión:</b> regresión logística de pertenecer a la institución (o programa) evaluada. Covariables: Saber 11 (z), INSE individual (con indicador de dato faltante), estrato, educación del padre y de la madre (4 niveles + sin dato), internet, colegio rural, grupo de edad, género y año de Saber Pro; en universidades además el núcleo básico del conocimiento, y en programas la modalidad (con controles solo del mismo núcleo).</li>
-        <li><b>Emparejamiento:</b> vecino más cercano 1:1 con reemplazo sobre el logit del puntaje de propensión, con <b>caliper</b> de 0,2 desviaciones estándar (los estudiantes sin un gemelo dentro de esa distancia quedan fuera). Grupo de control: hasta 100.000 estudiantes de otras instituciones, elegidos al azar.</li>
+        <li><b>Emparejamiento:</b> vecino más cercano 1:1 con reemplazo sobre el puntaje de propensión (la probabilidad estimada), con <b>caliper</b> de 0,2 desviaciones estándar de ese puntaje (los estudiantes sin un gemelo dentro de esa distancia quedan fuera). Grupo de control: hasta 100.000 estudiantes de otras instituciones, elegidos al azar.</li>
         <li><b>Efecto:</b> efecto promedio sobre los tratados (ATT), estimado con una regresión ponderada del avance sobre la muestra emparejada que incluye las mismas covariables; error estándar robusto (HC1) e intervalo del 95%.</li>
         <li><b>Balance:</b> diferencias estandarizadas de medias de todas las covariables antes y después de emparejar. Criterio del tablero: ninguna supera 0,25 y la de Saber 11 no supera 0,1 (en grupos pequeños las diferencias estandarizadas fluctúan mucho por azar, por eso el criterio estricto de 0,1 en todas se reporta aparte).</li>
         <li id="rkTechNums"></li>
@@ -448,6 +489,227 @@ footer{margin-top:40px;border-top:1px solid var(--rule);padding-top:16px;font-si
   </section>
 </main>
 </div><!-- fin vista ranking -->
+
+<div class="view" id="view-multinivel" hidden>
+<div class="intro">
+  <p class="lede">¿Los estudiantes que vienen de zonas golpeadas por el conflicto armado, o de colegios rurales, avanzan menos en la universidad que estudiantes parecidos de otras zonas? Para responderlo se usó un <b>modelo multinivel</b> con los 716.325 estudiantes que presentaron Saber 11 y Saber Pro. El modelo compara a cada estudiante con otros que llegaron con el mismo puntaje y las mismas condiciones y que estudian en la misma universidad.</p>
+  <div class="facts">
+    <span><b class="num">716.325</b> estudiantes</span>
+    <span><b class="num">1.109</b> municipios de origen</span>
+    <span><b class="num">277</b> universidades</span>
+    <span>Saber Pro <b>2022–2025</b></span>
+  </div>
+  <div class="ml-keys" aria-label="Resultados principales">
+    <div class="ml-key dn"><span class="v">−1,3 pts</span><span class="l">Brecha en Saber Pro de los estudiantes de municipios <b>PDET y ZOMAC</b> frente a estudiantes comparables de zonas sin conflicto.</span></div>
+    <div class="ml-key up"><span class="v">+0,4 pts</span><span class="l">Diferencia de los estudiantes de <b>colegio rural</b> frente a urbanos comparables: no hay desventaja rural.</span></div>
+    <div class="ml-key ac"><span class="v">3,4 pts</span><span class="l">Diferencia típica entre <b>universidades</b>: pesa más que el origen del estudiante.</span></div>
+    <div class="ml-key"><span class="v">≈ 94%</span><span class="l">De las diferencias en el avance son <b>individuales</b>; el municipio y la universidad explican el resto.</span></div>
+  </div>
+  <nav class="jump" aria-label="Secciones">
+    <a href="#ml-pregunta">La pregunta</a><a href="#ml-datos">Los datos</a><a href="#ml-metodo">El método</a><a href="#ml-conflicto">Resultados: conflicto</a><a href="#ml-rural">Resultados: ruralidad</a><a href="#ml-variacion">Dónde está la variación</a><a href="#ml-municipios">Explorador de municipios</a><a href="#ml-limites">Límites</a><a href="#ml-tecnico">Detalles técnicos</a>
+  </nav>
+</div>
+
+<div class="status" id="mlStatus" role="status"><span class="spinner"></span><span>Cargando los resultados…</span></div>
+
+<main class="guide" id="mlApp" hidden>
+  <section class="sec" id="ml-pregunta">
+    <h2>La pregunta</h2>
+    <div class="body">
+      <p>Colombia tiene dos brechas educativas conocidas: la de las zonas rurales frente a las ciudades y la de los territorios que vivieron con más intensidad el conflicto armado. Los estudiantes de esas zonas suelen llegar a la universidad con puntajes más bajos en Saber 11. Eso ya se sabe.</p>
+      <p>Aquí la pregunta es otra: <b>una vez en la universidad, ¿avanzan menos?</b> Es decir, si se toman dos estudiantes que llegaron con el mismo Saber 11, las mismas condiciones socioeconómicas y que estudian en la misma universidad, y uno viene de una zona de conflicto o de un colegio rural, ¿le va peor en Saber Pro?</p>
+      <p>La respuesta sirve para orientar apoyos: si la brecha se cierra durante la universidad, el esfuerzo debe ir al acceso; si persiste, también hace falta acompañamiento durante la carrera.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="ml-datos">
+    <h2>Los datos</h2>
+    <div class="body wide">
+      <p>Se usaron los estudiantes de Saber Pro 2022–2025 cuyo Saber 11 (2010–2022) se encontró con la llave del ICFES y que tienen la información necesaria: <b class="num">716.325</b> estudiantes de <b class="num">1.109</b> municipios y <b class="num">277</b> instituciones.</p>
+      <dl>
+        <dt>Zona de conflicto</dt>
+        <dd>Según el municipio del colegio donde presentó Saber 11. <b>PDET</b>: los 170 municipios de los Programas de Desarrollo con Enfoque Territorial (Decreto Ley 893 de 2017), priorizados por su alta afectación por el conflicto, pobreza, economías ilícitas y debilidad institucional. <b>ZOMAC</b>: las 344 Zonas Más Afectadas por el Conflicto Armado (Decreto 1650 de 2017). Casi todos los PDET son también ZOMAC, por eso se usan cuatro grupos: sin conflicto, solo ZOMAC, PDET y ZOMAC, y solo PDET (tres ciudades: Valledupar, Santa Marta y Ciénaga).</dd>
+        <dt>Colegio rural</dt>
+        <dd>Colegio ubicado en zona rural según Saber 11 (disponible en todos los años). Para 2010–2016 también se sabe si el estudiante vivía en zona rural o en la cabecera municipal.</dd>
+      </dl>
+      <div class="tbl"><table id="mlDescConf"></table></div>
+      <div class="tbl"><table id="mlDescRural"></table></div>
+      <p>Las tablas muestran el punto de partida: los estudiantes de municipios PDET y ZOMAC llegan con unos 26 puntos menos en Saber 11 y salen con unos 13 puntos menos en Saber Pro. Los de colegio rural llegan con 8 puntos menos y salen con 3,6 menos. Pero esas cifras mezclan muchas cosas a la vez (preparación previa, pobreza, universidad a la que asisten, carrera). El modelo sirve para separarlas.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="ml-metodo">
+    <h2>El método multinivel</h2>
+    <div class="body wide">
+      <h3>Paso 1. El avance de cada estudiante</h3>
+      <p>Saber 11 (0 a 500) y Saber Pro (0 a 300) tienen escalas distintas, así que cada puntaje se convierte en <b>puntuación estándar</b>: cuántas desviaciones estándar está el estudiante sobre o bajo el promedio. Saber Pro se estandariza dentro de cada año de aplicación y Saber 11 sobre la escala unificada del tablero.</p>
+      <div class="eq">\[ z^{SP}_i=\frac{SP_i-\overline{SP}_{t(i)}}{s_{SP,t(i)}},\qquad z^{S11}_i=\frac{S11_i-\overline{S11}}{s_{S11}},\qquad VA_i=z^{SP}_i-z^{S11}_i \]</div>
+      <p class="words"><b>En palabras:</b> \(VA_i\) mide si el estudiante \(i\) subió o bajó de lugar en la fila nacional entre el colegio y el final de la carrera. Un valor de +0,10 es subir una décima de desviación estándar, unos <b>2,5 puntos de Saber Pro</b>. Todas las brechas se reportan en esos puntos (coeficiente × 25).</p>
+
+      <h3>Paso 2. Por qué un modelo multinivel</h3>
+      <p>Los estudiantes no son independientes entre sí. Los de un mismo municipio comparten colegios, docentes y contexto, y los de una misma universidad comparten profesores y programas. Además, cada estudiante pertenece a la vez a un <b>municipio de origen</b> y a una <b>universidad de destino</b>, y esos dos grupos se cruzan: de un municipio salen estudiantes hacia muchas universidades, y cada universidad recibe estudiantes de muchos municipios. Un modelo de <b>clasificación cruzada</b> tiene en cuenta los dos agrupamientos a la vez.</p>
+      <div class="eq">\[ VA_{i}=\beta_0+\delta'\,\mathbf{C}_{m(i)}+\gamma'\,\mathbf{X}_i+u_{m(i)}+v_{j(i)}+\varepsilon_i \]
+      \[ u_m\sim\mathcal N(0,\sigma^2_u),\qquad v_j\sim\mathcal N(0,\sigma^2_v),\qquad \varepsilon_i\sim\mathcal N(0,\sigma^2_\varepsilon) \]</div>
+      <ul>
+        <li>\(m(i)\) es el municipio del colegio del estudiante \(i\) y \(j(i)\) su universidad.</li>
+        <li>\(\mathbf{C}_{m}\) es la variable de interés: los indicadores de zona de conflicto (solo ZOMAC, PDET y ZOMAC, solo PDET; la base es "sin conflicto"), o el indicador de colegio rural en el modelo de ruralidad. Su coeficiente \(\delta\) es la <b>brecha</b> que se busca.</li>
+        <li>\(\mathbf{X}_i\) son los controles: Saber 11 estandarizado, condiciones socioeconómicas, género, edad, modalidad, carrera y año.</li>
+        <li>\(u_m\) es el <b>efecto propio del municipio</b>: lo que tienen en común sus estudiantes y no explican las variables. \(v_j\) es el <b>efecto propio de la universidad</b>. \(\varepsilon_i\) es lo que queda de cada persona.</li>
+      </ul>
+      <p class="words"><b>En palabras:</b> el modelo explica el avance de cada estudiante como la suma de tres partes: lo que se debe a sus características (Saber 11, nivel socioeconómico, carrera…), lo que se debe a su municipio de origen y lo que se debe a su universidad. Como la universidad está en el modelo, la brecha de conflicto o de ruralidad compara a estudiantes <b>de la misma universidad</b>.</p>
+
+      <h3>Paso 3. Cuánto pesa cada nivel</h3>
+      <p>Con las varianzas estimadas se calcula la <b>correlación intraclase</b> (ICC), la parte de las diferencias entre estudiantes que se debe a cada nivel:</p>
+      <div class="eq">\[ \rho_{\text{municipio}}=\frac{\sigma^2_u}{\sigma^2_u+\sigma^2_v+\sigma^2_\varepsilon},\qquad \rho_{\text{universidad}}=\frac{\sigma^2_v}{\sigma^2_u+\sigma^2_v+\sigma^2_\varepsilon} \]</div>
+      <p>La raíz de cada varianza, multiplicada por 25, da la <b>diferencia típica</b> en puntos de Saber Pro entre municipios (\(25\,\sigma_u\)) y entre universidades (\(25\,\sigma_v\)).</p>
+
+      <h3>Paso 4. Comparar paso a paso</h3>
+      <p>En lugar de un solo modelo se estiman varios. A cada paso se agregan controles para ver cómo cambia la brecha a medida que se compara a estudiantes cada vez más parecidos:</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Modelo</th><th>Qué se agrega</th><th>Qué pregunta responde</th></tr></thead>
+        <tbody>
+          <tr><td>M0</td><td>Solo el año de Saber Pro y los efectos de municipio y universidad</td><td>¿Cuánto de las diferencias está entre municipios y entre universidades?</td></tr>
+          <tr><td>M1 · R1</td><td>+ zona de conflicto (o colegio rural)</td><td>¿Hay brecha bruta?</td></tr>
+          <tr><td>M2 · R2</td><td>+ Saber 11</td><td>¿Hay brecha entre estudiantes que llegaron con el mismo puntaje?</td></tr>
+          <tr><td>M3 · R3</td><td>+ índice socioeconómico del ICFES (INSE), estrato, educación del padre y de la madre, internet</td><td>¿Persiste con las mismas condiciones socioeconómicas?</td></tr>
+          <tr><td>M4 · R4</td><td>+ colegio rural (o zona de conflicto), género, grupo de edad, modalidad, núcleo del conocimiento; en R4 también colegio oficial</td><td>Modelo completo</td></tr>
+          <tr><td>M5</td><td>M4 + interacción conflicto × colegio rural</td><td>¿La brecha de conflicto es distinta en colegios rurales?</td></tr>
+          <tr><td>R5</td><td>Controles de R4, solo Saber 11 2010–2016, con cuatro grupos según colegio y residencia rural</td><td>¿Importa dónde vivía, además de dónde estudió?</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3>Paso 5. Por qué Saber 11 cambia tanto el resultado</h3>
+      <p>Como \(VA_i=z^{SP}_i-z^{S11}_i\), incluir \(z^{S11}_i\) como control con coeficiente \(\gamma_1\) equivale a modelar Saber Pro directamente:</p>
+      <div class="eq">\[ z^{SP}_i=(1+\gamma_1)\,z^{S11}_i+\dots \qquad \hat\gamma_1=-0{,}314\;\Rightarrow\;1+\hat\gamma_1=0{,}686 \]</div>
+      <p class="words"><b>En palabras:</b> de cada desviación estándar de ventaja en Saber 11 se conserva en Saber Pro cerca del 69%. Es la <b>regresión a la media</b>: a quien parte muy abajo le es más fácil subir, y a quien parte muy arriba, bajar. Por eso, sin igualar el Saber 11, los grupos que llegan con puntajes bajos parecen avanzar más de lo que realmente avanzan.</p>
+
+      <h3>Paso 6. Estimación e inferencia</h3>
+      <ul>
+        <li>Estimación por <b>máxima verosimilitud</b> con el paquete <span class="num">lme4</span> de R (función <span class="num">lmer</span>). Se usa máxima verosimilitud y no REML para poder comparar modelos con distintos efectos fijos.</li>
+        <li>Intervalo de confianza del 95% de Wald: \(\hat\delta\pm1{,}96\,\widehat{EE}(\hat\delta)\). Con más de 700.000 observaciones, la aproximación normal es adecuada. Una brecha es <b>clara</b> cuando su intervalo no incluye el cero.</li>
+        <li>Pruebas de razón de verosimilitud entre modelos anidados: \(LR=2(\ell_1-\ell_0)\sim\chi^2_{gl}\), donde \(gl\) es el número de parámetros agregados.</li>
+        <li>Los efectos propios de cada municipio se estiman como <b>predicciones empíricas de Bayes</b> (BLUP), que se encogen hacia cero según el tamaño del municipio:
+          <div class="eq">\[ \hat u_m\approx\lambda_m\,\bar r_m,\qquad \lambda_m=\frac{\sigma^2_u}{\sigma^2_u+\sigma^2_\varepsilon/n_m} \]</div>
+          donde \(\bar r_m\) es el residuo promedio de sus estudiantes y \(n_m\) cuántos son. Un municipio con pocos estudiantes (\(\lambda_m\) pequeño) queda cerca de cero, porque su promedio es poco confiable. Uno con miles (\(\lambda_m\approx1\)) conserva casi todo su promedio.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" id="ml-conflicto">
+    <h2>Resultados: conflicto armado</h2>
+    <div class="body wide">
+      <figure class="ml-fig">
+        <figcaption>Brecha en el avance frente a estudiantes de municipios sin conflicto, en puntos de Saber Pro, a medida que se compara a estudiantes cada vez más parecidos. El punto es la estimación y la línea, su intervalo del 95%.</figcaption>
+        <div class="ml-legend"><span><i style="background:var(--bad)"></i>Brecha negativa clara</span><span><i style="background:var(--good)"></i>Brecha positiva clara</span><span><i style="background:var(--neutral)"></i>Sin diferencia clara (el intervalo incluye 0)</span></div>
+        <div class="ml-grid2" id="mlForestConf"></div>
+      </figure>
+      <ol>
+        <li><b>La brecha bruta engaña.</b> Sin igualar el Saber 11 (M1), los estudiantes de zonas de conflicto parecen avanzar igual que los demás. La prueba conjunta de las tres categorías no es significativa (<span id="mlLR01"></span>). Es efecto de la regresión a la media: llegan con puntajes más bajos y les es más fácil subir.</li>
+        <li><b>Con el mismo Saber 11 aparece la desventaja</b>, y se concentra en los municipios <b>PDET y ZOMAC</b>, el núcleo del conflicto: −1,3 puntos (M2). Los municipios solo ZOMAC, con conflicto menos intenso, no muestran diferencia.</li>
+        <li><b>No es pobreza.</b> Al igualar las condiciones socioeconómicas (M3), la brecha casi no cambia: −1,2 puntos. En el modelo completo (M4), comparando estudiantes de la misma universidad, carrera, modalidad, género, edad y ruralidad, queda en <b>−1,3 puntos</b>, con un intervalo de −0,9 a −1,7.</li>
+        <li><b>"Solo PDET"</b> son tres ciudades grandes (Valledupar, Santa Marta y Ciénaga). Su intervalo es muy ancho porque son solo tres municipios, y no muestran diferencia clara.</li>
+        <li><b>La ruralidad no agrava la brecha.</b> En M5, la interacción conflicto × colegio rural no es significativa en conjunto (<span id="mlLR45"></span>). Dentro de los municipios PDET y ZOMAC, los estudiantes de colegio rural tienen incluso una brecha algo menor que los de colegio urbano.</li>
+      </ol>
+      <p class="words"><b>En síntesis:</b> dos estudiantes que llegaron con el mismo Saber 11 y las mismas condiciones socioeconómicas, y que estudian lo mismo en la misma universidad, terminan separados por cerca de 1,3 puntos de Saber Pro si uno viene de un municipio PDET y ZOMAC. Es una brecha real pero pequeña: menos de la mitad de la diferencia típica entre universidades.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="ml-rural">
+    <h2>Resultados: ruralidad</h2>
+    <div class="body wide">
+      <figure class="ml-fig">
+        <figcaption>Diferencia en el avance de los estudiantes de colegio rural frente a los de colegio urbano (R1–R4) y de cuatro grupos según colegio y residencia (R5, solo Saber 11 2010–2016). Puntos de Saber Pro con intervalo del 95%.</figcaption>
+        <div class="ml-grid2" id="mlForestRural"></div>
+      </figure>
+      <ol>
+        <li><b>Con el mismo Saber 11, rurales y urbanos avanzan igual</b> (R2: diferencia prácticamente nula).</li>
+        <li><b>Con las mismas condiciones socioeconómicas, los rurales avanzan un poco más:</b> +0,4 puntos (R3 y R4, intervalo +0,3 a +0,6). Los estudiantes rurales tienen en promedio menos recursos, y a menos recursos suele corresponder menos avance. Comparados con urbanos de su misma situación, salen ligeramente adelante.</li>
+        <li><b>La ventaja está en quienes son rurales "del todo"</b> (R5): estudió en colegio rural y vivía en zona rural, +0,5 puntos. Vivir en zona rural pero estudiar en colegio urbano, o al revés, no muestra diferencia clara.</li>
+        <li><b>Ruralidad y conflicto son cosas distintas.</b> En el mismo modelo, la brecha de los municipios PDET y ZOMAC sigue siendo −1,3 puntos aunque se descuente la ruralidad. Lo que se asocia a menor avance es el conflicto, no el campo.</li>
+      </ol>
+      <p class="words"><b>Dos lecturas posibles de la pequeña ventaja rural.</b> La más probable es la <b>selección</b>: muchos menos jóvenes rurales llegan a la universidad y terminan hasta presentar Saber Pro, y los que lo logran suelen ser especialmente persistentes. La otra es que <b>Saber 11 subestime a los estudiantes rurales</b>, si sus colegios los preparan menos para el formato del examen. Ninguna de las dos significa que la educación rural sea mejor.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="ml-variacion">
+    <h2>Dónde está la variación</h2>
+    <div class="body wide">
+      <figure class="ml-fig">
+        <figcaption>Reparto de las diferencias en el avance entre estudiantes (varianza) en tres niveles: el propio estudiante, su universidad y su municipio de origen. M0 sin controles; M4 con todos los controles.</figcaption>
+        <div class="ml-legend"><span><i style="background:var(--neutral)"></i>Estudiante</span><span><i style="background:var(--a)"></i>Universidad</span><span><i style="background:var(--b)"></i>Municipio de origen</span></div>
+        <div id="mlVar" style="display:grid;gap:10px"></div>
+      </figure>
+      <ul id="mlVarTxt"></ul>
+      <p class="words"><b>En palabras:</b> casi todo lo que distingue el avance de un estudiante del de otro está en el propio estudiante, no en el lugar de donde viene ni en la universidad. Entre los factores colectivos, <b>la universidad pesa unas tres veces más que el municipio de origen</b>, y la etiqueta de conflicto explica muy poco de las diferencias entre municipios. Hay municipios PDET con avances altos y municipios sin conflicto con avances bajos (véase el explorador).</p>
+    </div>
+  </section>
+
+  <section class="sec" id="ml-municipios">
+    <h2>Explorador de municipios</h2>
+    <div class="body wide">
+      <p>Efecto propio de cada municipio en el modelo completo (M4): cuánto más o menos avanzan sus estudiantes que lo esperado por sus características y su universidad, en puntos de Saber Pro. Los municipios con pocos estudiantes quedan cerca de cero porque su estimación es poco confiable (véase el paso 6 del método).</p>
+      <div class="ml-tools">
+        <div><label for="mlQ">Buscar municipio o departamento</label><input id="mlQ" type="search" placeholder="Ej.: Tumaco, Cauca"></div>
+        <div><label for="mlCat">Zona</label><select id="mlCat"><option value="">Todas</option><option>Sin conflicto</option><option>Solo ZOMAC</option><option>PDET y ZOMAC</option><option>Solo PDET</option></select></div>
+        <div><label for="mlSort">Ordenar por</label><select id="mlSort"><option value="u-">Mayor efecto propio</option><option value="u+">Menor efecto propio</option><option value="e-">Más estudiantes</option><option value="n+">Nombre</option></select></div>
+        <div><label for="mlMin">Mínimo de estudiantes</label><select id="mlMin"><option value="1">Todos</option><option value="30" selected>30 o más</option><option value="100">100 o más</option><option value="500">500 o más</option></select></div>
+      </div>
+      <div class="tbl mtab"><table>
+        <thead><tr><th>Municipio</th><th>Zona</th><th class="r">Estudiantes</th><th>Efecto propio (puntos de Saber Pro, con intervalo del 95%)</th></tr></thead>
+        <tbody id="mlBody"></tbody>
+      </table></div>
+      <div class="pager" id="mlPager"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="ml-limites">
+    <h2>Límites</h2>
+    <div class="body">
+      <ul>
+        <li><b>Asociación, no causa.</b> El modelo muestra que los estudiantes de municipios PDET y ZOMAC avanzan menos que estudiantes comparables, pero no prueba que el conflicto lo cause. Esos municipios difieren en muchas cosas que los datos no recogen, como la calidad de los colegios o la oferta cultural.</li>
+        <li><b>Solo vemos a quienes llegaron.</b> El conflicto y la ruralidad reducen la probabilidad de llegar a la universidad y de presentar Saber Pro. Si los que lo lograron son los más persistentes, la brecha real del conjunto de jóvenes podría ser mayor que la estimada.</li>
+        <li><b>El origen se mide por el municipio del colegio.</b> No siempre coincide con donde el estudiante vivió el conflicto, y las listas PDET y ZOMAC son designaciones de política de 2017: no miden la intensidad del conflicto en los años en que cada estudiante iba al colegio.</li>
+        <li><b>Las condiciones socioeconómicas</b> (INSE, estrato, educación de los padres, internet) provienen del cuestionario que el estudiante responde al presentar Saber Pro, al final de la carrera. Describen su hogar en ese momento.</li>
+        <li><b>La residencia rural</b> solo existe para Saber 11 de 2010 a 2016; para los demás años la ruralidad se mide por el colegio.</li>
+        <li><b>Las brechas son promedios.</b> Dentro de cada grupo hay estudiantes con avances muy distintos.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" id="ml-tecnico">
+    <h2>Detalles técnicos</h2>
+    <div class="body wide">
+      <ul>
+        <li><b>Software:</b> R, paquete <span class="num">lme4</span>. Todo está en el script <span class="num">preparacion_datos_IVA.R</span>: parte G (clasificación territorial), parte H (modelo de conflicto) y parte I (modelo de ruralidad).</li>
+        <li><b>Listas oficiales:</b> PDET de la Agencia de Renovación del Territorio (archivo MunicipiosPDET.xlsx), verificada código por código contra datos.gov.co y Finagro. ZOMAC del anexo de municipios PDET y ZOMAC de Finagro. Las dos listas están en la carpeta <span class="num">referencias</span> del proyecto.</li>
+        <li><b>Categorías de referencia:</b> sin conflicto; colegio urbano; estrato 1; padres con primaria o menos; sin internet; 22 años o menos; hombre; modalidad a distancia tradicional; núcleo Administración; Saber Pro 2022. El INSE faltante se imputa con la mediana y se agrega un indicador de dato faltante.</li>
+        <li><b>Conversión a puntos:</b> 1 desviación estándar del puntaje global de Saber Pro ≈ 25 puntos (entre 24 y 27 según el año).</li>
+      </ul>
+      <div class="tbl"><table id="mlVarTbl"></table></div>
+      <div class="tbl"><table id="mlLRTbl"></table></div>
+      <details class="more"><summary>Todos los coeficientes del modelo completo (M4)</summary><div class="tbl"><table id="mlCoefTbl"></table></div></details>
+    </div>
+  </section>
+
+  <section class="sec" id="ml-glosario">
+    <h2>Glosario</h2>
+    <div class="body">
+      <dl>
+        <dt>Avance (VA)</dt><dd>Diferencia entre la posición del estudiante en Saber Pro y en Saber 11, ambas en desviaciones estándar frente al promedio nacional.</dd>
+        <dt>Brecha</dt><dd>Diferencia promedio de avance entre un grupo y el de referencia, igualando todo lo demás que está en el modelo.</dd>
+        <dt>Modelo multinivel</dt><dd>Modelo que reconoce que los estudiantes están agrupados (en municipios y universidades) y estima cuánto de las diferencias se debe a cada nivel.</dd>
+        <dt>Clasificación cruzada</dt><dd>Cuando cada estudiante pertenece a dos agrupaciones que no están anidadas una dentro de la otra, como municipio de origen y universidad.</dd>
+        <dt>Efecto aleatorio</dt><dd>Lo que comparten los estudiantes de un mismo municipio (o universidad) que no explican las variables del modelo.</dd>
+        <dt>Correlación intraclase</dt><dd>Proporción de las diferencias entre estudiantes que se debe a un nivel (municipio o universidad).</dd>
+        <dt>Intervalo de confianza 95%</dt><dd>Rango donde muy probablemente está el valor real. Si incluye el cero, no se puede afirmar que haya diferencia.</dd>
+        <dt>Regresión a la media</dt><dd>Tendencia de quienes obtienen puntajes extremos en una prueba a quedar más cerca del promedio en la siguiente.</dd>
+        <dt>PDET / ZOMAC</dt><dd>Listas oficiales de municipios más afectados por el conflicto armado, creadas tras el Acuerdo de Paz (Decretos 893 y 1650 de 2017).</dd>
+      </dl>
+    </div>
+  </section>
+</main>
+</div><!-- fin vista multinivel -->
+
 
 <footer>
   <span>Proyecto IVA (valor agregado en educación superior) · Facultad de Ingeniería, Diseño e Innovación y Escuela de Ciencias Básicas, Politécnico Grancolombiano.</span>
@@ -839,9 +1101,10 @@ const PTS_POR_DE = 25;   // 1 desviación estándar de Saber Pro global ≈ 25 p
 const POLI = 2725;
 
 /* Rutas: #comparador, #ranking o el id de una sección */
+const VISTAS = ["comparador","ranking","multinivel"];
 function show(v){
-  $("#view-comparador").hidden = v!=="comparador";
-  $("#view-ranking").hidden = v!=="ranking";
+  VISTAS.forEach(x=>{ $("#view-"+x).hidden = v!==x; });
+  window.dispatchEvent(new CustomEvent("vista",{detail:v}));
   document.querySelectorAll(".tab").forEach(t=>{ if(t.dataset.view===v) t.setAttribute("aria-current","page"); else t.removeAttribute("aria-current"); });
   if(v==="ranking" && !R.loaded) loadRanking();
   if(v==="ranking" && R.loaded) drawChart();
@@ -849,10 +1112,10 @@ function show(v){
 function route(){
   const h = decodeURIComponent(location.hash.slice(1));
   let v = "comparador";
-  if(h==="ranking") v="ranking";
-  else if(h && h!=="comparador"){ const el=document.getElementById(h); if(el && el.closest("#view-ranking")) v="ranking"; }
+  if(VISTAS.includes(h)) v=h;
+  else if(h){ const el=document.getElementById(h); const vw=el && el.closest(".view"); if(vw) v=vw.id.replace("view-",""); }
   show(v);
-  if(h && h!=="ranking" && h!=="comparador"){ const el=document.getElementById(h); if(el) requestAnimationFrame(()=>el.scrollIntoView({block:"start"})); }
+  if(h && !VISTAS.includes(h)){ const el=document.getElementById(h); if(el) requestAnimationFrame(()=>el.scrollIntoView({block:"start"})); }
 }
 window.addEventListener("hashchange", route);
 
@@ -1032,6 +1295,164 @@ function detail(r){
 route();
 new MutationObserver(()=>{ if(R.loaded && R.data) render(); }).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
 matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change",()=>{ if(R.loaded && R.data) render(); });
+})();
+</script>
+<script>
+/* ---------- Pestaña: conflicto y ruralidad (modelo multinivel) ---------- */
+(() => {
+"use strict";
+const $ = (s,el=document)=>el.querySelector(s);
+const PTS = 25;
+const fmt = new Intl.NumberFormat("es-CO");
+const f1 = new Intl.NumberFormat("es-CO",{minimumFractionDigits:1,maximumFractionDigits:1});
+const f1s = new Intl.NumberFormat("es-CO",{minimumFractionDigits:1,maximumFractionDigits:1,signDisplay:"exceptZero"});
+const ft = new Intl.NumberFormat("es-CO",{maximumFractionDigits:2,signDisplay:"exceptZero"});
+const f3 = new Intl.NumberFormat("es-CO",{minimumFractionDigits:3,maximumFractionDigits:3,signDisplay:"exceptZero"});
+const f4 = new Intl.NumberFormat("es-CO",{minimumFractionDigits:4,maximumFractionDigits:4});
+const pc = v=>new Intl.NumberFormat("es-CO",{maximumFractionDigits:1}).format(100*v)+"%";
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const esc = t => String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const M = {loaded:false, D:null, page:0, mj:false};
+
+window.addEventListener("vista", e=>{
+  if(e.detail!=="multinivel") return;
+  if(!M.loaded) load(); else drawAll();
+});
+
+async function load(){
+  M.loaded = true;
+  try{
+    const r = await fetch("multinivel.json"); if(!r.ok) throw new Error("No se encontró el archivo de resultados.");
+    M.D = await r.json();
+  }catch(err){ const st=$("#mlStatus"); st.classList.add("err"); st.textContent="No se pudieron cargar los resultados. "+err.message; return; }
+  $("#mlStatus").hidden = true; $("#mlApp").hidden = false;
+  tables(); explorer(); drawAll(); mathjax();
+  new ResizeObserver(()=>drawForests()).observe($("#mlForestConf"));
+  new MutationObserver(()=>drawAll()).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+  matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change",()=>drawAll());
+  const h = decodeURIComponent(location.hash.slice(1)); const el = h && document.getElementById(h);
+  if(el && el.closest("#view-multinivel")) requestAnimationFrame(()=>el.scrollIntoView({block:"start"}));
+}
+function mathjax(){
+  if(M.mj) return; M.mj = true;
+  window.MathJax = {tex:{inlineMath:[["\\(","\\)"]],displayMath:[["\\[","\\]"]]}, svg:{fontCache:"global"}, startup:{typeset:false}};
+  const s = document.createElement("script");
+  s.src = "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"; s.async = true;
+  s.onload = () => MathJax.startup.promise.then(()=>MathJax.typesetPromise([$("#view-multinivel")]));
+  document.head.appendChild(s);
+}
+function drawAll(){ if(!M.D || $("#view-multinivel").hidden) return; drawForests(); drawVar(); renderExplorer(); }
+
+/* ---- Tablas descriptivas y técnicas ---- */
+function tables(){
+  const D = M.D;
+  $("#mlDescConf").innerHTML = `<thead><tr><th>Zona del colegio</th><th class="r">Estudiantes</th><th class="r">Municipios</th><th class="r">Saber 11 medio</th><th class="r">Saber Pro medio</th><th class="r">INSE medio</th><th class="r">Colegio rural</th></tr></thead><tbody>`+
+    D.desc_conf.map(r=>`<tr><td>${esc(r.conflicto)}</td><td class="n">${fmt.format(r.estudiantes)}</td><td class="n">${fmt.format(r.municipios)}</td><td class="n">${f1.format(r.saber11_medio)}</td><td class="n">${f1.format(r.saberpro_medio)}</td><td class="n">${f1.format(r.inse_medio)}</td><td class="n">${f1.format(r.pct_colegio_rural)}%</td></tr>`).join("")+"</tbody>";
+  $("#mlDescRural").innerHTML = `<thead><tr><th>Tipo de colegio</th><th class="r">Estudiantes</th><th class="r">Saber 11 medio</th><th class="r">Saber Pro medio</th><th class="r">INSE medio</th><th class="r">Colegio oficial</th><th class="r">De zona PDET o ZOMAC</th><th class="r">En programa presencial</th></tr></thead><tbody>`+
+    D.desc_rural.slice().sort((a,b)=>a.colegio<b.colegio?1:-1).map(r=>`<tr><td>${esc(r.colegio)}</td><td class="n">${fmt.format(r.estudiantes)}</td><td class="n">${f1.format(r.saber11_medio)}</td><td class="n">${f1.format(r.saberpro_medio)}</td><td class="n">${f1.format(r.inse_medio)}</td><td class="n">${f1.format(r.pct_oficial)}%</td><td class="n">${f1.format(r.pct_pdet_zomac)}%</td><td class="n">${f1.format(r.pct_presencial)}%</td></tr>`).join("")+"</tbody>";
+  // pruebas LR
+  const lr = Object.fromEntries(D.pruebas.map(p=>[p.comparacion,p]));
+  const lrTxt = p => `χ² = ${f1.format(p.chi2)}, gl = ${p.gl}, p = ${p.p<0.001?"< 0,001":new Intl.NumberFormat("es-CO",{maximumFractionDigits:2}).format(p.p)}`;
+  $("#mlLR01").textContent = lrTxt(lr["M0 vs M1"]); $("#mlLR45").textContent = lrTxt(lr["M4 vs M5"]);
+  $("#mlLRTbl").innerHTML = `<thead><tr><th>Comparación (razón de verosimilitud)</th><th class="r">χ²</th><th class="r">gl</th><th class="r">p</th><th>Qué prueba</th></tr></thead><tbody>`+
+    D.pruebas.map(p=>`<tr><td>${esc(p.comparacion)}</td><td class="n">${f1.format(p.chi2)}</td><td class="n">${p.gl}</td><td class="n">${p.p<0.001?"&lt; 0,001":new Intl.NumberFormat("es-CO",{maximumFractionDigits:3}).format(p.p)}</td><td>${({"M0 vs M1":"¿Hay brecha bruta entre zonas?","M3 vs M4":"¿Aportan los controles adicionales del modelo completo?","M4 vs M5":"¿La brecha de conflicto difiere entre colegios rurales y urbanos?"})[p.comparacion]||""}</td></tr>`).join("")+"</tbody>";
+  // varianzas
+  const vrows = [...D.var_conf.map(v=>({...v,serie:"Conflicto"})), ...D.var_rural.map(v=>({...v,serie:"Ruralidad"}))];
+  $("#mlVarTbl").innerHTML = `<thead><tr><th>Modelo</th><th class="r">σ²<sub>u</sub> municipio</th><th class="r">σ²<sub>v</sub> universidad</th><th class="r">σ²<sub>ε</sub> estudiante</th><th class="r">ICC municipio</th><th class="r">ICC universidad</th><th class="r">AIC</th><th class="r">n</th></tr></thead><tbody>`+
+    vrows.map(v=>{const t=v.var_municipio+v.var_ies+v.var_estudiante; return `<tr><td>${esc(v.modelo)}${v.muestra==="residencia"?" (2010–2016)":""}</td><td class="n">${f4.format(v.var_municipio)}</td><td class="n">${f4.format(v.var_ies)}</td><td class="n">${f4.format(v.var_estudiante)}</td><td class="n">${pc(v.var_municipio/t)}</td><td class="n">${pc(v.var_ies/t)}</td><td class="n">${fmt.format(Math.round(v.AIC))}</td><td class="n">${fmt.format(v.n)}</td></tr>`;}).join("")+"</tbody>";
+  // coeficientes M4
+  $("#mlCoefTbl").innerHTML = `<thead><tr><th>Término</th><th class="r">Coeficiente</th><th class="r">EE</th><th class="r">IC 95%</th><th class="r">Puntos Saber Pro</th></tr></thead><tbody>`+
+    D.coef_M4.map(c=>`<tr><td>${esc(etiqueta(c.t))}</td><td class="n">${f3.format(c.b)}</td><td class="n">${f4.format(c.se)}</td><td class="n">${f3.format(c.b-1.96*c.se)} a ${f3.format(c.b+1.96*c.se)}</td><td class="n">${c.t==="(Intercept)"?"—":f1s.format(c.b*PTS)}</td></tr>`).join("")+"</tbody>";
+}
+function etiqueta(t){
+  const pre = [["(Intercept)","Intercepto"],["anio_f","Año Saber Pro: "],["conflicto","Zona: "],["z_s11","Saber 11 (z)"],["inse_na","INSE sin dato"],["inse","INSE (por punto)"],["estrato","Estrato: "],["educ_padre","Educación del padre: "],["educ_madre","Educación de la madre: "],["internet","Internet: "],["rural","Colegio rural"],["mujer","Mujer"],["edad_g","Edad: "],["modalidad","Modalidad: "],["nbc","Núcleo: "]];
+  for(const [k,v] of pre) if(t.startsWith(k)) return v.endsWith(": ")? v+t.slice(k.length) : (t===k? v : v+" "+t.slice(k.length));
+  return t;
+}
+
+/* ---- Gráficos de brechas (forest plots) ---- */
+const MOD_TXT = {M1:"M1 · Brecha bruta",M2:"M2 · + Saber 11",M3:"M3 · + Socioeconómico",M4:"M4 · Modelo completo",M5:"M5 · Con interacción",
+                 R1:"R1 · Brecha bruta",R2:"R2 · + Saber 11",R3:"R3 · + Socioeconómico",R4:"R4 · Modelo completo"};
+function drawForests(){
+  if(!M.D) return;
+  const B = M.D.brechas_conf, R = M.D.brechas_rural;
+  const cats = [["conflictoPDET y ZOMAC","PDET y ZOMAC"],["conflictoSolo ZOMAC","Solo ZOMAC"],["conflictoSolo PDET","Solo PDET (3 ciudades)"]];
+  $("#mlForestConf").innerHTML = cats.map(([t,l])=>`<div class="ml-chartbox"><h3>${esc(l)}</h3>${forest(B.filter(r=>r.t===t).map(r=>({lab:MOD_TXT[r.m],b:r.b,se:r.se})), l)}</div>`).join("");
+  const r14 = R.filter(r=>r.t==="rural").map(r=>({lab:MOD_TXT[r.m],b:r.b,se:r.se}));
+  const r5 = R.filter(r=>r.m==="R5").map(r=>({lab:r.t.replace("grupo_rural","").replace("Colegio ","Col. ").replace(", vive en zona rural",", vive rural").replace(", vive en cabecera",", vive en cabecera"),b:r.b,se:r.se}));
+  $("#mlForestRural").innerHTML = `<div class="ml-chartbox"><h3>Colegio rural frente a urbano</h3>${forest(r14,"Colegio rural")}</div>`+
+    `<div class="ml-chartbox"><h3>R5 · Según colegio y residencia (base: colegio urbano, vive en cabecera)</h3>${forest(r5,"Grupos de residencia")}</div>`;
+}
+function forest(rows, name){
+  const W = 460, rowH = 36, padT = 10, padB = 46, labW = 158, valW = 64;
+  const H = padT + rows.length*rowH + padB;
+  const pts = rows.map(r=>({...r, p:r.b*PTS, lo:(r.b-1.96*r.se)*PTS, hi:(r.b+1.96*r.se)*PTS}));
+  let lo = Math.min(0,...pts.map(r=>r.lo)), hi = Math.max(0,...pts.map(r=>r.hi));
+  const pad = (hi-lo)*0.08 || 0.5; lo -= pad; hi += pad;
+  const x0 = labW, x1 = W - valW, X = v => x0 + (v-lo)/(hi-lo)*(x1-x0);
+  const ink=css("--ink"), ink2=css("--ink-2"), muted=css("--muted"), rule=css("--rule"), good=css("--good"), bad=css("--bad"), neu=css("--neutral"), surf=css("--surface");
+  const fb=css("--f-body"), fm=css("--f-mono");
+  const ticks = niceTicks(lo,hi,5);
+  let g = "";
+  for(const t of ticks){ const x=X(t).toFixed(1); g+=`<line x1="${x}" x2="${x}" y1="${padT}" y2="${H-padB+4}" stroke="${rule}"/><text x="${x}" y="${H-padB+20}" text-anchor="middle" font-size="11" fill="${muted}" font-family="${fm}">${ft.format(t)}</text>`; }
+  g += `<line x1="${X(0).toFixed(1)}" x2="${X(0).toFixed(1)}" y1="${padT-2}" y2="${H-padB+4}" stroke="${ink}" stroke-width="1.5"/>`;
+  g += `<text x="${(x0+x1)/2}" y="${H-5}" text-anchor="middle" font-size="11" fill="${ink2}" font-family="${fb}">puntos de Saber Pro (0 = sin diferencia)</text>`;
+  pts.forEach((r,i)=>{
+    const y = padT + i*rowH + rowH/2, c = r.lo>0?good:(r.hi<0?bad:neu);
+    g += `<text x="0" y="${y}" dominant-baseline="middle" font-size="12" fill="${ink2}" font-family="${fb}">${esc(r.lab)}</text>`;
+    g += `<g><title>${esc(r.lab)}: ${f1s.format(r.p)} puntos (intervalo ${f1s.format(r.lo)} a ${f1s.format(r.hi)})</title>`+
+         `<rect x="${x0}" y="${y-rowH/2}" width="${x1-x0}" height="${rowH}" fill="transparent"/>`+
+         `<line x1="${X(Math.max(lo,r.lo)).toFixed(1)}" x2="${X(Math.min(hi,r.hi)).toFixed(1)}" y1="${y}" y2="${y}" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/>`+
+         `<circle cx="${X(r.p).toFixed(1)}" cy="${y}" r="5.5" fill="${c}" stroke="${surf}" stroke-width="2"/></g>`;
+    g += `<text x="${W}" y="${y}" text-anchor="end" dominant-baseline="middle" font-size="12" fill="${ink}" font-family="${fm}">${f1s.format(r.p)}</text>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(name)}: ${pts.map(r=>r.lab+" "+f1s.format(r.p)+" puntos").join("; ")}">${g}</svg>`;
+}
+function niceTicks(a,b,n){ const span=b-a, raw=span/n, mag=Math.pow(10,Math.floor(Math.log10(raw))); const step=[1,2,2.5,5,10].map(m=>m*mag).find(s=>span/s<=n)||raw; const out=[]; for(let v=Math.ceil(a/step)*step; v<=b+1e-9; v+=step) out.push(Math.round(v*100)/100); return out; }
+
+/* ---- Reparto de la varianza ---- */
+function drawVar(){
+  const V = Object.fromEntries(M.D.var_conf.map(v=>[v.modelo,v]));
+  const bar = (v,lab)=>{ const t=v.var_municipio+v.var_ies+v.var_estudiante, e=v.var_estudiante/t, u=v.var_ies/t, m=v.var_municipio/t;
+    return `<div class="vrow"><span>${lab}</span><div><div class="vbar" role="img" aria-label="${lab}: estudiante ${pc(e)}, universidad ${pc(u)}, municipio ${pc(m)}"><span style="width:${e*100}%;background:${css("--neutral")}"></span><span style="width:${u*100}%;background:${css("--a")}"></span><span style="width:${m*100}%;background:${css("--b")}"></span></div>`+
+      `<div style="font-size:.8rem;margin-top:4px">Estudiante <b class="num">${pc(e)}</b> · Universidad <b class="num">${pc(u)}</b> · Municipio <b class="num">${pc(m)}</b></div></div></div>`; };
+  $("#mlVar").innerHTML = bar(V.M0,"M0 · sin controles") + bar(V.M4,"M4 · modelo completo");
+  const sd = x=>f1.format(Math.sqrt(x)*PTS);
+  const red = M.D.var_conf.find(v=>v.modelo==="M1").reduccion_var_municipio_vs_M0, red2 = V.M2.reduccion_var_municipio_vs_M0;
+  $("#mlVarTxt").innerHTML =
+    `<li><b>Diferencia típica entre universidades</b> (modelo completo): <b class="num">${sd(V.M4.var_ies)}</b> puntos de Saber Pro (\\(25\\,\\hat\\sigma_v\\)).</li>`+
+    `<li><b>Diferencia típica entre municipios de origen</b>: <b class="num">${sd(V.M4.var_municipio)}</b> puntos (\\(25\\,\\hat\\sigma_u\\)).</li>`+
+    `<li><b>Diferencia típica entre estudiantes</b> dentro de un mismo municipio y universidad: <b class="num">${sd(V.M4.var_estudiante)}</b> puntos.</li>`+
+    `<li>La etiqueta de conflicto por sí sola reduce la varianza entre municipios apenas un <b class="num">${pc(red)}</b> (M0 → M1). Igualar el Saber 11 la reduce en un <b class="num">${pc(red2)}</b> (M0 → M2): la mitad de lo que distingue a los municipios es la preparación con que llegan sus estudiantes.</li>`;
+  if(window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([$("#mlVarTxt")]);
+}
+
+/* ---- Explorador de municipios ---- */
+const PAGE = 20;
+function explorer(){
+  ["mlQ","mlCat","mlSort","mlMin"].forEach(id=>$("#"+id).addEventListener(id==="mlQ"?"input":"change",()=>{M.page=0; renderExplorer();}));
+}
+const tc = s=>String(s).toLowerCase().replace(/(^|[\s(-])(\p{L})/gu,(m,a,b)=>a+b.toUpperCase()).replace(/\b(Y|De|Del|La|El)\b/g,w=>w.toLowerCase());
+const norm = s=>String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+function renderExplorer(){
+  const D=M.D; if(!D) return;
+  const q=norm($("#mlQ").value.trim()), c=$("#mlCat").value, min=+$("#mlMin").value, so=$("#mlSort").value;
+  let L = D.municipios.filter(r=>r.e>=min && (!c||r.k===c) && (!q || norm(r.n).includes(q) || norm(r.d).includes(q)));
+  const k=so.slice(0,1), dir=so.endsWith("-")?-1:1;
+  L.sort((a,b)=> k==="n" ? a.n.localeCompare(b.n,"es") : dir*((a[k])-(b[k])));
+  const pages=Math.max(1,Math.ceil(L.length/PAGE)); if(M.page>=pages) M.page=pages-1;
+  const ext = 9; // escala fija de la barra: ±9 puntos
+  const good=css("--good"), bad=css("--bad"), neu=css("--neutral"), ink2=css("--ink-2"), rule=css("--rule");
+  const bar = r=>{ const p=r.u*PTS, lo=(r.u-1.96*r.se)*PTS, hi=(r.u+1.96*r.se)*PTS, W=100, sx=v=>Math.max(0,Math.min(W,(v+ext)/(2*ext)*W)), col=lo>0?good:(hi<0?bad:neu);
+    return `<div class="vabar"><span class="num">${f1s.format(p)}</span><svg viewBox="0 0 ${W} 16" preserveAspectRatio="none" aria-hidden="true"><line x1="0" x2="${W}" y1="8" y2="8" stroke="${rule}"/><line x1="${W/2}" x2="${W/2}" y1="1" y2="15" stroke="${ink2}"/><line x1="${sx(lo)}" x2="${sx(hi)}" y1="8" y2="8" stroke="${col}" stroke-width="2" stroke-opacity=".6"/><rect x="${sx(p)-2.5}" y="3" width="5" height="10" rx="1.5" fill="${col}"/></svg></div>`; };
+  const cls = {"Sin conflicto":"eq","Solo ZOMAC":"warn","PDET y ZOMAC":"dn","Solo PDET":"warn"};
+  $("#mlBody").innerHTML = L.slice(M.page*PAGE,(M.page+1)*PAGE).map(r=>`<tr><td><div class="nm">${esc(r.n)}</div><div class="sub">${esc(r.d)}${r.s?" · Subregión PDET "+esc(tc(r.s)):""}</div></td><td><span class="pill ${cls[r.k]}">${esc(r.k)}</span></td><td class="n r">${fmt.format(r.e)}</td><td>${bar(r)}</td></tr>`).join("") || `<tr><td colspan="4">No hay municipios con estos filtros.</td></tr>`;
+  const pg=$("#mlPager");
+  pg.innerHTML = L.length>PAGE ? `<span>Mostrando ${fmt.format(M.page*PAGE+1)}–${fmt.format(Math.min(L.length,(M.page+1)*PAGE))} de ${fmt.format(L.length)} municipios</span><span><button type="button" id="mlPrev" ${M.page===0?"disabled":""}>Anterior</button> <button type="button" id="mlNext" ${M.page>=pages-1?"disabled":""}>Siguiente</button></span>` : `<span>${fmt.format(L.length)} municipio${L.length===1?"":"s"}</span>`;
+  $("#mlPrev")?.addEventListener("click",()=>{M.page--; renderExplorer();});
+  $("#mlNext")?.addEventListener("click",()=>{M.page++; renderExplorer();});
+}
+if(!$("#view-multinivel").hidden) load();   // si la página abrió directamente en esta pestaña
 })();
 </script>
 </body></html>
